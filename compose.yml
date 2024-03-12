@@ -1,0 +1,17 @@
+services:
+  java-server:
+    build: .
+    container_name: taskopia-backend
+    restart: unless-stopped
+    networks:
+      - taskopia
+    ports:
+      - 8080:80
+    volumes:
+      - .:/code
+    command: mvn spring-boot:run
+
+networks:
+  taskopia:
+    name: taskopia
+    driver: bridge
