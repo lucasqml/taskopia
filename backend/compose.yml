@@ -1,5 +1,5 @@
 services:
-  java-server:
+  taskopia-backend:
     build: .
     container_name: taskopia-backend
     restart: unless-stopped
