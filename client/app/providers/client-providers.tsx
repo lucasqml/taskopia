@@ -2,18 +2,14 @@
 
 import { MemoryTaskopiaAPI, TaskopiaAPIProvider } from "./taskopia-api"
 
-export function LayoutWithProviders({
-  children,
+export function ClientProviders({
+    children,
 }: {
-  children: React.ReactNode
+    children: React.ReactNode
 }) {
-  return (
-    <html lang="en">
-      <body>
+    return (
         <TaskopiaAPIProvider taskopiaAPI={new MemoryTaskopiaAPI()}>
-          {children}
+            {children}
         </TaskopiaAPIProvider>
-      </body>
-    </html>
-  )
+    )
 }

@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
-import { LayoutWithProviders } from './providers/layout-with-providers';
-
-const inter = Inter({ subsets: ['latin'] })
+import { ClientProviders } from './providers/client-providers';
 
 export const metadata: Metadata = {
   title: 'Taskopia',
@@ -17,11 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <LayoutWithProviders
+      <body>
+        <ClientProviders
         >
           {children}
-        </LayoutWithProviders>
+        </ClientProviders>
 
       </body>
     </html>
