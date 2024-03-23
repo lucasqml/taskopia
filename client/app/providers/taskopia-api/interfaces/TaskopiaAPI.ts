@@ -1,4 +1,4 @@
-import { Board, User } from "@/app/model";
+import { Board, User } from "@/app/types";
 
 export interface TaskopiaAPI {
     getCurrentUser(): Promise<User>;

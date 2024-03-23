@@ -1,4 +1,4 @@
-import { Board, User } from "@/app/model";
+import { Board, User } from "@/app/types";
 import { TaskopiaAPI } from "../interfaces/TaskopiaAPI";
 
 export class MemoryTaskopiaAPI implements TaskopiaAPI {
