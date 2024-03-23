@@ -1,8 +1,9 @@
 import { Board, User } from "@/app/types";
+import { QueryOf } from "@/app/types/query";
 
 export interface TaskopiaAPI {
-    getCurrentUser(): Promise<User>;
-    getCurrentBoard(): Promise<Board>;
+    currentUser(): QueryOf<User>;
+    currentBoard(): QueryOf<Board>;
 }
 
 

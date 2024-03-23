@@ -1,16 +1,22 @@
 import { Board, User } from "@/app/types";
 import { TaskopiaAPI } from "../interfaces/TaskopiaAPI";
+import { QueryOf } from "@/app/types/query";
 
 export class MemoryTaskopiaAPI implements TaskopiaAPI {
-    async getCurrentUser(): Promise<User> {
-        return {
+    currentUser(): QueryOf<User> {
+        const data = {
             id: '1',
             name: 'Lucas',
             email: 'lucas@mail.provider'
         } 
-    }
-    async getCurrentBoard(): Promise<Board> {
         return {
+            data,
+            error: null,
+            isLoading: false
+        }
+    }
+    currentBoard(): QueryOf<Board> {
+        const data = {
             id: '1',
             name: 'My Default Board',
             taskLists: [
@@ -33,6 +39,11 @@ export class MemoryTaskopiaAPI implements TaskopiaAPI {
                     tasks: []
                 }
             ]
+        }
+        return {
+            data,
+            error: null,
+            isLoading: false
         }
     }
 

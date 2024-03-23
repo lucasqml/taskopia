@@ -1,34 +1,21 @@
 "use client";
 
 import { useTaskopiaAPI } from "@/app/providers/taskopia-api";
-import { Board } from "@/app/types";
-import { useEffect, useState } from "react";
 
 export function CurrentBoard() {
   const api = useTaskopiaAPI();
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentBoard, setCurrentBoard] = useState<Board | null>(null);
-
-  useEffect(() => {
-    async function fetchCurrentBoard() {
-      setIsLoading(true);
-      try {
-        const board = await api.getCurrentBoard();
-        setCurrentBoard(board);
-      } catch (error) {
-        console.error(error);
-      }
-      setIsLoading(false);
-    }
-
-    fetchCurrentBoard();
-  }, []);
+  const {
+    data: currentBoard,
+    isLoading,
+    error,
+  } = api.currentBoard();
 
   return (
     <section className="flex flex-col gap-4 container">
       <h2 className="text-2xl">Current Board</h2>
       {isLoading && <p>Loading current board...</p>}
-      {currentBoard && (
+      {error && <p>Error loading current board: {error.message}</p>}
+      {!isLoading && currentBoard && (
         <>
           <h3 className="text-xl"
           >{currentBoard.name}</h3>

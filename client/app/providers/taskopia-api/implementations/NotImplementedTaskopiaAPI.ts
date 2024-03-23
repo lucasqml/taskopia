@@ -1,11 +1,13 @@
 import { User, Board } from "@/app/types";
 import { TaskopiaAPI } from "..";
+import { QueryOf } from "@/app/types/query";
 
 export class NotImplementedTaskopiaAPI implements TaskopiaAPI{
-    getCurrentUser(): Promise<User> {
+    currentBoard(): QueryOf<Board> {
         throw new Error("Method not implemented.");
     }
-    getCurrentBoard(): Promise<Board> {
+
+    currentUser(): QueryOf<User> {
         throw new Error("Method not implemented.");
     }
     
