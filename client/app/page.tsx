@@ -29,9 +29,11 @@ export default function Home() {
   return (
     <>
       <header>
-        <h1>Taskopia!</h1>
+        <h1
+          className="text-4xl font-bold text-center p-8 bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text"
+        >Taskopia!</h1>
         {isLoading && <p>Loading...</p>}
-        {user && <p>Welcome, {user.name}!</p>}
+        {user && <p className="text-center p-4 bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text"        >Welcome, {user.name}!</p>}
       </header>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
 
