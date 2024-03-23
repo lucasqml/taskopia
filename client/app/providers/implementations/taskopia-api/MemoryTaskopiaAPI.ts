@@ -1,22 +1,20 @@
 import { Board, User } from "@/app/types";
-import { TaskopiaAPI } from "../interfaces/TaskopiaAPI";
 import { QueryOf } from "@/app/types/query";
+import { CurrentBoardProvider } from "../../interfaces/current-board-provider";
+import { CurrentUserProvider } from "../../interfaces/current-user-provider";
 
-export class MemoryTaskopiaAPI implements TaskopiaAPI {
-    currentUser(): QueryOf<User> {
-        const data = {
+export class MemoryTaskopiaAPI implements CurrentBoardProvider, CurrentUserProvider {
+    private _currentUser: User;
+    private _currentBoard: Board;
+
+    public constructor() {
+        this._currentUser = {
             id: '1',
             name: 'Lucas',
             email: 'lucas@mail.provider'
-        } 
-        return {
-            data,
-            error: null,
-            isLoading: false
         }
-    }
-    currentBoard(): QueryOf<Board> {
-        const data = {
+
+        this._currentBoard = {
             id: '1',
             name: 'My Default Board',
             taskLists: [
@@ -40,8 +38,19 @@ export class MemoryTaskopiaAPI implements TaskopiaAPI {
                 }
             ]
         }
+    }
+
+
+    currentUser(): QueryOf<User> {
         return {
-            data,
+            data: this._currentUser,
+            error: null,
+            isLoading: false
+        }
+    }
+    currentBoard(): QueryOf<Board> {
+        return {
+            data: this._currentBoard,
             error: null,
             isLoading: false
         }

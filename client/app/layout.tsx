@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { ClientProviders } from './providers/client-providers';
+import { MainProviders } from './providers/main-providers';
 
 export const metadata: Metadata = {
   title: 'Taskopia',
@@ -15,10 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ClientProviders
+        <MainProviders
         >
           {children}
-        </ClientProviders>
+        </MainProviders>
 
       </body>
     </html>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTaskopiaAPI } from "@/app/providers/taskopia-api";
+import { useCurrentUserProvider } from "@/app/providers/interfaces";
 import { Page, PageTitle } from "@/app/types";
 
 type HeaderProps = {
@@ -10,9 +10,9 @@ type HeaderProps = {
 export function Header({ page }: HeaderProps) {
   const title = PageTitle[page];
 
-  const taskopiaAPI = useTaskopiaAPI()
+  const userProvider = useCurrentUserProvider();
 
-  const { data: user, isLoading, error } = taskopiaAPI.currentUser()
+  const { data: user, isLoading, error } = userProvider.currentUser()
   return (
     <header>
       <h1 className="text-4xl font-bold text-center p-8 bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text">
