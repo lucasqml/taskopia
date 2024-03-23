@@ -1,3 +1,5 @@
+"use client";
+
 import { useTaskopiaAPI } from "@/app/providers/taskopia-api";
 import { Page, PageTitle, User } from "@/app/types";
 import { useEffect, useState } from "react";
