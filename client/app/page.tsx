@@ -1,5 +1,5 @@
 import { Header } from "./components";
-import { CurrentBoard } from "./components/current-board/current-board.component";
+import { CurrentBoard } from "./current-board.component";
 
 export default function Home() {
  
