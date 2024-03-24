@@ -22,7 +22,22 @@ export class MemoryTaskopiaAPI implements CurrentBoardProvider, CurrentUserProvi
                     id: '1',
                     name: 'To Do',
                     positionInBoard: 1,
-                    tasks: []
+                    tasks: [
+                        {
+                            id: '1',
+                            name: 'Task 1',
+                            positionInList: 1,
+                            tags: ['important', 'urgent'],
+                            dueDate: new Date('2025-12-31'),
+                        },
+                        {
+                            id: '2',
+                            name: 'Task 2',
+                            positionInList: 2,
+                            tags: ['urgent'],
+                            dueDate: new Date('2025-12-31'),
+                        }
+                    ]
                 },
                 {
                     id: '2',
