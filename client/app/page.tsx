@@ -1,17 +1,11 @@
-import { Header } from "./components";
-import { CurrentBoard } from "./current-board.component";
+"use client";
+
+import { CurrentBoardPage } from "./current-board.page";
+import { useCurrentBoardProvider } from "./providers/interfaces";
 
 export default function Home() {
- 
-  return (
-    <>
-      <Header page="home" />
-
-      <main className="h-full flex flex-col items-center justify-between px-24 pb-6">
-
-        <CurrentBoard />
-
-      </main>
-    </>
-  )
+  
+  return <CurrentBoardPage
+    provider={useCurrentBoardProvider()}
+  />;
 }
