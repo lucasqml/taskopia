@@ -1,0 +1,32 @@
+services:
+  database:
+    image: mysql:8.1.0
+    container_name: taskopia-database
+    restart: unless-stopped
+    networks:
+      - taskopia
+    ports:
+      - 3307:3306
+    volumes:
+      - ./backend/database/data.sql:/docker-entrypoint-initdb.d/data.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+
+  backend:
+    build: ./backend
+    container_name: taskopia-backend
+    depends_on:
+      - database
+    restart: unless-stopped
+    networks:
+      - taskopia
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/backend
+    command: mvn spring-boot:run
+
+networks:
+  taskopia:
+    name: taskopia
+    driver: bridge

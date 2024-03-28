@@ -1,6 +1,6 @@
 FROM maven:3.6.3-openjdk-17 as build
 WORKDIR /code
-COPY . /code
+COPY . .
 
 RUN mvn clean install -DskipTests
 
