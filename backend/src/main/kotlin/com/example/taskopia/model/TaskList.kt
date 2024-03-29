@@ -13,6 +13,9 @@ class TaskList {
     @JoinColumn(name = "board_id")
     var board: Board? = null
 
+    @Column(name = "title", nullable = false)
+    var title: String = ""
+
     @OneToMany(mappedBy = "taskList", cascade = [CascadeType.ALL])
     var tasks: List<Task> = mutableListOf()
 
