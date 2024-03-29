@@ -26,6 +26,22 @@ services:
       - .:/backend
     command: mvn spring-boot:run
 
+  frontend:
+    container_name: taskopia-frontend
+    build: ./client
+    restart: always
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    volumes:
+      - ./client:/app
+      - ./client/node_modules:/app/node_modules
+      - ./client/.next:/app/.next
+    ports:
+      - 3000:3000
+
+
 networks:
   taskopia:
     name: taskopia
