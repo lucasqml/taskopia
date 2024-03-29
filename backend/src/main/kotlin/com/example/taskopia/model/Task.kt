@@ -1,10 +1,13 @@
 package com.example.taskopia.model
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import java.time.LocalDateTime
 import jakarta.persistence.*
 
 @Entity
 @Table(name = "tasks")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id")
 class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
