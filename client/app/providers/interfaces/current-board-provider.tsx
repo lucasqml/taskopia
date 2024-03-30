@@ -17,39 +17,10 @@ const CurrentBoardContext = createContext<CurrentBoardProvider>(
 
 export const CurrentBoardProvider: React.FC<{
   children?: ReactNode;
-  boardAPI: BoardAPI;
-}> = ({ children, boardAPI }) => {
-  const [currentBoardQuery, setCurrentBoardQuery] = useState<QueryOf<Board>>({
-    isLoading: true,
-    data: undefined,
-    error: undefined,
-  });
-
-  useEffect(() => {
-    async function fetchCurrentBoard() {
-      try {
-        const board = await boardAPI.getBoard("1");
-        setCurrentBoardQuery({
-          isLoading: false,
-          data: board,
-          error: null,
-        });
-      } catch (error: any) {
-        setCurrentBoardQuery({
-          isLoading: false,
-          data: undefined,
-          error: error,
-        });
-      }
-    } 
-    
-    fetchCurrentBoard();
-  }, [])
-
+  currentBoardProvider: CurrentBoardProvider;
+}> = ({ children, currentBoardProvider }) => {
   return (
-    <CurrentBoardContext.Provider value={{
-      currentBoard: () => currentBoardQuery,
-    }}>
+    <CurrentBoardContext.Provider value={currentBoardProvider}>
       {children}
     </CurrentBoardContext.Provider>
   );

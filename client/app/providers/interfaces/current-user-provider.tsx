@@ -17,40 +17,10 @@ const CurrentUserContext = createContext<CurrentUserProvider>(
 
 export const CurrentUserProvider: React.FC<{
   children?: ReactNode;
-  userAPI: UserAPI;
-}> = ({ children, userAPI }) => {
-  const [currentUserQuery, setCurrentUserQuery] = useState<QueryOf<User>>({
-    isLoading: true,
-    data: undefined,
-    error: undefined,
-  });
-
-  useEffect(() => {
-    async function fetchCurrentUser() {
-      try {
-        const user = await userAPI.getUser('1');
-        setCurrentUserQuery({
-          isLoading: false,
-          data: user,
-          error: null,
-        });
-      } catch (error: any) {
-        setCurrentUserQuery({
-          isLoading: false,
-          data: undefined,
-          error: error,
-        });
-      }
-    }
-
-    fetchCurrentUser();
-  }, [])
-
-
+  currentUserProvider: CurrentUserProvider;
+}> = ({ children, currentUserProvider }) => {
   return (
-    <CurrentUserContext.Provider value={{
-      currentUser: () => currentUserQuery,
-    }}>
+    <CurrentUserContext.Provider value={currentUserProvider}>
       {children}
     </CurrentUserContext.Provider>
   );
