@@ -21,6 +21,5 @@ export type TaskList = {
 
 export type Board = {
     id: string;
-    name: string;
     taskLists: TaskList[];
 }

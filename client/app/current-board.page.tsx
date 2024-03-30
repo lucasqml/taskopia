@@ -21,9 +21,6 @@ export function CurrentBoardPage({
           {error && <p>Error loading current board: {error.message}</p>}
           {!isLoading && currentBoard && (
             <>
-              <h3 className="text-xl text-left py-4 bg-gradient-to-r from-blue-400 to-blue-100  text-transparent bg-clip-text font-bold ">
-                {currentBoard.name}
-              </h3>
               <div className="container flex flex-row gap-20 h-full">
                 {currentBoard.taskLists
                   .sort((a, b) => a.positionInBoard - b.positionInBoard)
