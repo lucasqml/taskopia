@@ -17,7 +17,7 @@ export function CurrentBoardPage({
     <>
       <Header page="home" />
 
-      <main className="h-full flex flex-col items-center justify-between px-24 pb-6">
+      <main className="h-full flex flex-col items-center justify-between px-24 pb-6 min-h-0">
         <section className="flex flex-col gap-4 container h-full">
           {isLoading && <p>Loading current board...</p>}
           {error && <p>Error loading current board: {error.message}</p>}

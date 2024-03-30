@@ -13,7 +13,6 @@ export function TaskList({ taskList, onAddTask }: TaskListProps) {
 
     onAddTask({
       description: "",
-      tags: [],
       title: "Sem título + " + positionInList,
       taskListId: taskList.id,
       positionInList,
@@ -32,7 +31,7 @@ export function TaskList({ taskList, onAddTask }: TaskListProps) {
           Add Task
         </button>
       </div>
-      <ul className="flex flex-col gap-2">
+      <ul className="flex flex-col gap-2 h-full overflow-y-auto">
         {taskList.tasks
           .sort((a, b) => a.positionInList - b.positionInList)
           .map((task) => (
