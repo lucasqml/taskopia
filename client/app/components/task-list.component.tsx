@@ -26,7 +26,7 @@ export function TaskList({ taskList, onAddTask }: TaskListProps) {
     >
       <div className="flex flex-row justify-between">
         <h3 className="text-lg text-left text-white font-bold">
-          {taskList.name}
+          {taskList.title}
         </h3>
         <button onClick={onAddButtonClick} className="bg-white text-black p-2 rounded">
           Add Task

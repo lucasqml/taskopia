@@ -1,16 +1,16 @@
-import { Board } from "@/app/types";
+import { Board, Task } from "@/app/types";
 import { QueryOf } from "@/app/types/query";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { NotImplementedCurrentBoardProvider } from "../implementations/not-implemented-providers";
 
 export interface BoardAPI {
   getBoard(id: string): Promise<Board>;
+  postTask(task: CreateTaskInput): Promise<Task>;
 }
 
 export type CreateTaskInput = {
   title: string;
   description: string;
-  tags: string[];
   taskListId: string;
   positionInList: number;
 }

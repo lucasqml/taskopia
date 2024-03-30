@@ -1,8 +1,7 @@
-import { Board } from "@/app/types";
-import { BoardAPI } from "../../interfaces/current-board-provider";
+import { Board, Task } from "@/app/types";
+import { BoardAPI, UserAPI, CreateTaskInput } from "@/app/providers/interfaces";
 import { AxiosInstance } from "axios";
-import { UserAPI } from "../../interfaces";
-import { GetBoardOutput } from "./types";
+import { GetBoardOutput, PostTaskInput, PostTaskOutput } from "./types";
 
 export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
     protected abstract _getHttpClient(): AxiosInstance
@@ -39,15 +38,17 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
                 taskLists: data.taskLists.map(taskList => {
                     return {
                         id: taskList.id,
-                        name: taskList.title,
+                        title: taskList.title,
                         positionInBoard: taskList.positionInBoard,
                         tasks: taskList.tasks.map(task => {
                             return {
                                 id: task.id,
-                                name: task.title,
+                                title: task.title,
+                                description: task.description,
                                 tags: [],
                                 dueDate: new Date(task.createdAt),
-                                positionInList: task.positionInTaskList
+                                positionInList: task.positionInTaskList,
+                                taskListId: taskList.id
                             }
                         })
                     }
@@ -55,6 +56,37 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
                 )
             }
 
+        } catch (error: any) {
+            throw new Error(error)
+        }
+    }
+
+    public async postTask(task: CreateTaskInput): Promise<Task> {
+        try {
+            const input: PostTaskInput = {
+                description: task.description,
+                positionInTaskList: task.positionInList,
+                taskList: {
+                    id: task.taskListId
+                },
+                title: task.title
+            }
+            const response = await this._getHttpClient().post(`/tasks`, input)
+
+            const data = response.data as PostTaskOutput | null
+            if (!data) {
+                throw new Error('Task not created')
+            }
+
+            return {
+                id: data.id,
+                title: data.title,
+                description: data.description,
+                tags: [],
+                dueDate: new Date(data.createdAt),
+                positionInList: data.positionInTaskList,
+                taskListId: data.taskList.id
+            }
         } catch (error: any) {
             throw new Error(error)
         }
