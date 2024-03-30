@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { TaskopiaAPI } from "..";
-import { CurrentBoardProvider, CurrentUserProvider } from "../../interfaces";
+import { CreateTaskInput, CurrentBoardProvider, CurrentUserProvider } from "../../interfaces";
 import { QueryOf } from "@/app/types/query";
-import { Board } from "@/app/types";
+import { Board, Task } from "@/app/types";
 
 export function HttpBoardProvider(
   boardAPI: TaskopiaAPI,
@@ -45,9 +45,41 @@ export function HttpBoardProvider(
     if (currentUser) fetchCurrentBoard(currentUser.id);
   }, [currentUser?.id]);
 
+  const onAddTask = async (task: CreateTaskInput) => {
+    if (!currentBoardQuery.data) return;
+    const newTask: Task = {
+      id: "123",
+      name: task.title,
+      description: task.description,
+      tags: task.tags,
+      taskListId: task.taskListId,
+      positionInList: task.positionInList,
+    };
+
+    const newBoard: Board = {
+      ...currentBoardQuery.data,
+      taskLists: currentBoardQuery.data?.taskLists.map((taskList) => {
+        if (taskList.id === task.taskListId) {
+          return {
+            ...taskList,
+            tasks: [...taskList.tasks, newTask],
+          };
+        }
+        return taskList;
+      }) 
+    };
+
+    setCurrentBoardQuery({
+      isLoading: false,
+      data: newBoard,
+      error: null,
+    });
+  }
+
   return {
     currentBoard: () => {
       return currentBoardQuery;
     },
+    createTask: onAddTask
   };
 }

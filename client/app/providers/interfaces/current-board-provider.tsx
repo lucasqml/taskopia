@@ -7,8 +7,17 @@ export interface BoardAPI {
   getBoard(id: string): Promise<Board>;
 }
 
+export type CreateTaskInput = {
+  title: string;
+  description: string;
+  tags: string[];
+  taskListId: string;
+  positionInList: number;
+}
+
 export interface CurrentBoardProvider {
   currentBoard(): QueryOf<Board>;
+  createTask(task: CreateTaskInput): Promise<void>;
 }
 
 const CurrentBoardContext = createContext<CurrentBoardProvider>(

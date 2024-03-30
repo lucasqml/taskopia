@@ -7,9 +7,11 @@ export type User = {
 export type Task = {
     id: string;
     name: string;
+    description: string;
     tags: string[];
     dueDate?: Date;
     positionInList: number;
+    taskListId: string;
 }
 
 export type TaskList = {
