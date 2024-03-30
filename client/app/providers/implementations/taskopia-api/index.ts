@@ -1,1 +1,1 @@
-export * from './MemoryTaskopiaAPI'
+export * from './DevTaskopiaAPI'

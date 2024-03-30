@@ -1,10 +1,14 @@
 import { User } from "@/app/types";
 import { QueryOf } from "@/app/types/query";
-import { ReactNode, createContext, useContext } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { NotImplementedCurrentUserProvider } from "../implementations/not-implemented-providers";
 
 export interface CurrentUserProvider {
   currentUser(): QueryOf<User>;
+}
+
+export interface UserAPI {
+  getUser(): Promise<User>;
 }
 
 const CurrentUserContext = createContext<CurrentUserProvider>(
@@ -13,10 +17,40 @@ const CurrentUserContext = createContext<CurrentUserProvider>(
 
 export const CurrentUserProvider: React.FC<{
   children?: ReactNode;
-  currentUserProvider: CurrentUserProvider;
-}> = ({ children, currentUserProvider }) => {
+  userAPI: UserAPI;
+}> = ({ children, userAPI }) => {
+  const [currentUserQuery, setCurrentUserQuery] = useState<QueryOf<User>>({
+    isLoading: true,
+    data: undefined,
+    error: undefined,
+  });
+
+  useEffect(() => {
+    async function fetchCurrentUser() {
+      try {
+        const user = await userAPI.getUser();
+        setCurrentUserQuery({
+          isLoading: false,
+          data: user,
+          error: null,
+        });
+      } catch (error: any) {
+        setCurrentUserQuery({
+          isLoading: false,
+          data: undefined,
+          error: error,
+        });
+      }
+    }
+
+    fetchCurrentUser();
+  }, [])
+
+
   return (
-    <CurrentUserContext.Provider value={currentUserProvider}>
+    <CurrentUserContext.Provider value={{
+      currentUser: () => currentUserQuery,
+    }}>
       {children}
     </CurrentUserContext.Provider>
   );
