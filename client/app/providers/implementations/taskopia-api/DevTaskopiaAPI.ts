@@ -18,17 +18,17 @@ export class DevTaskopiaAPI implements BoardAPI, UserAPI {
 
     }
 
-    public async getUser() {
+    public async getUser(id: string) {
         return {
-            id: '1',
+            id,
             name: 'Paulo Miranda',
             email: 'pauloMiranda@gmail.com'
         }
     }
 
-    public async getBoard(): Promise<Board> {
+    public async getBoard(id: string): Promise<Board> {
         try {
-            const response = await this._httpClient.get(`/board/1`)
+            const response = await this._httpClient.get(`/board/${id}`)
             const data = response.data as GetBoardOutput | null
 
             if (!data) {

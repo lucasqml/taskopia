@@ -8,7 +8,7 @@ export interface CurrentUserProvider {
 }
 
 export interface UserAPI {
-  getUser(): Promise<User>;
+  getUser(userId: string): Promise<User>;
 }
 
 const CurrentUserContext = createContext<CurrentUserProvider>(
@@ -28,7 +28,7 @@ export const CurrentUserProvider: React.FC<{
   useEffect(() => {
     async function fetchCurrentUser() {
       try {
-        const user = await userAPI.getUser();
+        const user = await userAPI.getUser('1');
         setCurrentUserQuery({
           isLoading: false,
           data: user,
