@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { TaskopiaAPI } from "..";
-import { CurrentBoardProvider } from "../../interfaces";
+import { CurrentBoardProvider, CurrentUserProvider } from "../../interfaces";
 import { QueryOf } from "@/app/types/query";
 import { Board } from "@/app/types";
 
 export function HttpBoardProvider(
-  boardAPI: TaskopiaAPI
+  boardAPI: TaskopiaAPI,
+  currentUserProvider: CurrentUserProvider
 ): CurrentBoardProvider {
   const [currentBoardQuery, setCurrentBoardQuery] = useState<QueryOf<Board>>({
     isLoading: true,
@@ -13,10 +14,20 @@ export function HttpBoardProvider(
     error: undefined,
   });
 
+  const currentUser = currentUserProvider.currentUser().data;
+
   useEffect(() => {
-    async function fetchCurrentBoard() {
+    async function fetchCurrentBoard(
+      currentUserId: string
+    ) {
       try {
-        const board = await boardAPI.getBoard("1");
+        setCurrentBoardQuery({
+          isLoading: true,
+          data: undefined,
+          error: undefined
+        })
+
+        const board = await boardAPI.getBoard(currentUserId);
         setCurrentBoardQuery({
           isLoading: false,
           data: board,
@@ -31,8 +42,8 @@ export function HttpBoardProvider(
       }
     }
 
-    fetchCurrentBoard();
-  }, []);
+    if (currentUser) fetchCurrentBoard(currentUser.id);
+  }, [currentUser?.id]);
 
   return {
     currentBoard: () => {

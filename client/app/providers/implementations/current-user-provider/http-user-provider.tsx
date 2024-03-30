@@ -14,6 +14,7 @@ export function HttpUserProvider(userAPI: TaskopiaAPI): CurrentUserProvider {
   useEffect(() => {
     async function fetchCurrentUser() {
       try {
+        // TODO: get user from cookie
         const user = await userAPI.getUser("1");
         setCurrentUserQuery({
           isLoading: false,
