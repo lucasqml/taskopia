@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { DevTaskopiaAPI } from "..";
+import { TaskopiaAPI } from "..";
 import { CurrentBoardProvider } from "../../interfaces";
 import { QueryOf } from "@/app/types/query";
 import { Board } from "@/app/types";
 
 export function HttpBoardProvider(
-  boardAPI: DevTaskopiaAPI
+  boardAPI: TaskopiaAPI
 ): CurrentBoardProvider {
   const [currentBoardQuery, setCurrentBoardQuery] = useState<QueryOf<Board>>({
     isLoading: true,

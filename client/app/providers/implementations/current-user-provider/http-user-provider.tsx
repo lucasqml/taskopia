@@ -2,9 +2,9 @@ import { User } from "@/app/types";
 import { QueryOf } from "@/app/types/query";
 import { useEffect, useState } from "react";
 import { CurrentUserProvider } from "../../interfaces";
-import { DevTaskopiaAPI } from "..";
+import { TaskopiaAPI } from "..";
 
-export function HttpUserProvider(userAPI: DevTaskopiaAPI): CurrentUserProvider {
+export function HttpUserProvider(userAPI: TaskopiaAPI): CurrentUserProvider {
   const [currentUserQuery, setCurrentUserQuery] = useState<QueryOf<User>>({
     isLoading: true,
     data: undefined,
