@@ -1,7 +1,7 @@
-import { type Task, TaskList } from "@/app/types";
+import { TaskList } from "@/app/types";
 import { Task as TaskComponent } from "@/app/components";
 import { CreateTaskInput } from "../providers/interfaces";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 type TaskListProps = {
   taskList: TaskList;
@@ -14,7 +14,7 @@ export function TaskList({ taskList, onAddTask }: TaskListProps) {
 
   const createInputRef = useRef<HTMLInputElement>(null);
 
-  const onCreateButtonClick = () => {
+  const onFormSubmit = () => {
     const positionInList = taskList.tasks.length;
     const newTaskTitle = taskTitle.trim() || "Sem título + " + positionInList;
     onAddTask({
@@ -31,7 +31,9 @@ export function TaskList({ taskList, onAddTask }: TaskListProps) {
     setTaskTitle("");
     setIsAddingTask(true);
     createInputRef.current?.scrollIntoView({ behavior: "smooth" });
-    createInputRef.current?.focus();
+    createInputRef.current?.focus({
+      preventScroll: true,
+    });
   };
 
   return (
@@ -59,7 +61,10 @@ export function TaskList({ taskList, onAddTask }: TaskListProps) {
 
         <form
           className="flex flex-col gap-2 w-full justify-end"
-         
+          onSubmit={(e) => {
+            e.preventDefault();
+            onFormSubmit();
+          }}
         >
           <input
             type="text"
@@ -67,14 +72,9 @@ export function TaskList({ taskList, onAddTask }: TaskListProps) {
             onChange={(e) => setTaskTitle(e.target.value)}
             ref={createInputRef}
           />
-          <button
-            type="button"
-            onClick={onCreateButtonClick}
-            className="bg-red-400 text-black p-2 rounded"
-          >
+          <button type="submit" className="bg-red-400 text-black p-2 rounded">
             Create Task
           </button>
-          
         </form>
       </ul>
     </section>
