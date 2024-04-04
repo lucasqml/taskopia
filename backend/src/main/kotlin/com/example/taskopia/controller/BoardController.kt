@@ -12,7 +12,6 @@ class BoardController(private val boardRepository: BoardRepository) {
 
     @GetMapping("/{userId}")
     fun getBoardByUserId(@PathVariable userId: Long): Board? {
-        print(message = "userId: $userId")
         return boardRepository.findByUserId(userId)
     }
 
