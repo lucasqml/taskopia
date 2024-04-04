@@ -1,10 +1,14 @@
 import { User } from "@/app/types";
 import { QueryOf } from "@/app/types/query";
-import { ReactNode, createContext, useContext } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { NotImplementedCurrentUserProvider } from "../implementations/not-implemented-providers";
 
 export interface CurrentUserProvider {
   currentUser(): QueryOf<User>;
+}
+
+export interface UserAPI {
+  getUser(userId: string): Promise<User>;
 }
 
 const CurrentUserContext = createContext<CurrentUserProvider>(

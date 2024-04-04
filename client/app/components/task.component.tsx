@@ -13,7 +13,7 @@ export function Task({
   flex flex-col justify-between gap-1 min-h-20 bg-gray-100 p-2 pt-3 rounded 
 "
   >
-    <h4 className="text-cyan-600">{task.name}</h4>
+    <h4 className="text-cyan-600">{task.title}</h4>
     <div className="flex flex-row gap-1">
       {task.tags.map((tag) => (
         <span

@@ -6,21 +6,22 @@ export type User = {
 
 export type Task = {
     id: string;
-    name: string;
+    title: string;
+    description: string;
     tags: string[];
     dueDate?: Date;
     positionInList: number;
+    taskListId: string;
 }
 
 export type TaskList = {
     id: string;
-    name: string;
+    title: string;
     positionInBoard: number;
     tasks: Task[];
 }
 
 export type Board = {
     id: string;
-    name: string;
     taskLists: TaskList[];
 }

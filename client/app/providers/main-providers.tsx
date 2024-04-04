@@ -2,16 +2,24 @@
 
 import { useState } from "react";
 import { CurrentBoardProvider } from "./interfaces/current-board-provider";
-import { MemoryTaskopiaAPI } from "./implementations";
+import {
+  DevTaskopiaAPI,
+  HttpBoardProvider,
+  MemoryUserProvider,
+} from "./implementations";
 import { CurrentUserProvider } from "./interfaces";
 
 export function MainProviders({ children }: { children: React.ReactNode }) {
-  const [memoryTaskopiaAPI] = useState(() => new MemoryTaskopiaAPI());
+  // TODO use factory?
+  const [taskopiaAPI] = useState(() => new DevTaskopiaAPI());
+  const userProvider = MemoryUserProvider();
+  const boardProvider = HttpBoardProvider(taskopiaAPI, userProvider);
+
   return (
-    <CurrentBoardProvider currentBoardProvider={memoryTaskopiaAPI}>
-      <CurrentUserProvider currentUserProvider={memoryTaskopiaAPI}>
+    <CurrentUserProvider currentUserProvider={userProvider}>
+      <CurrentBoardProvider currentBoardProvider={boardProvider}>
         {children}
-      </CurrentUserProvider>
-    </CurrentBoardProvider>
+      </CurrentBoardProvider>
+    </CurrentUserProvider>
   );
 }
