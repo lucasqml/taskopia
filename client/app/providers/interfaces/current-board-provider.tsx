@@ -6,6 +6,7 @@ import { NotImplementedCurrentBoardProvider } from "../implementations/not-imple
 export interface BoardAPI {
   getBoard(id: string): Promise<Board>;
   postTask(task: CreateTaskInput): Promise<Task>;
+  putTask(task: EditTaskInput): Promise<Task>;
 }
 
 export type CreateTaskInput = {

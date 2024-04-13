@@ -15,4 +15,7 @@ class TaskController(private val taskRepository: TaskRepository) {
 
     @PostMapping("")
     fun createTask(@RequestBody task: Task): Task = taskRepository.save(task)
+
+    @PutMapping("")
+    fun updateTask(@RequestBody task: Task): Task = taskRepository.save(task)
 }

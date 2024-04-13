@@ -76,6 +76,45 @@ export function BoardProviderActionsHandler({
         }
     }
 
+    async function processEditTaskAction(action: EditTaskAction) {
+        // actually send the request to the server
+        try {
+            const task = action.actionInput;
+            const optimisticTask = action.actionResult;
+            const editedTask = await boardAPI.putTask(task);
+            if (!currentBoardQuery.data) {
+                throw new Error("No board loaded");
+            }
+            const board: Board = currentBoardQuery.data;
+
+            // update the task with the server response
+            const updatedBoard = {
+                ...currentBoardQuery.data,
+                taskLists: board.taskLists.map((taskList) => {
+                    return {
+                        ...taskList,
+                        tasks: taskList.tasks.map((task) => {
+                            if (task.id === optimisticTask.id) {
+                                return editedTask;
+                            }
+                            return task;
+                        }),
+                    };
+                }),
+            };
+
+            setBoardQueryState({
+                isLoading: false,
+                data: updatedBoard,
+                error: null,
+            });
+        } catch (error: any) {
+            // TODO throw better error
+            throw error;
+        }
+    
+    }
+
     useEffect(() => {
         async function processActions() {
             if (actionsQueue.length === 0) return;
@@ -87,7 +126,7 @@ export function BoardProviderActionsHandler({
                         await processAddTaskAction(action);
                         break;
                     case "EDIT_TASK":
-                        // TODO implement edit task action
+                        await processEditTaskAction(action);
                         break;
                 }
 

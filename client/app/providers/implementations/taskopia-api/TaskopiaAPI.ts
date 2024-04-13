@@ -1,7 +1,7 @@
 import { Board, Task } from "@/app/types";
-import { BoardAPI, UserAPI, CreateTaskInput } from "@/app/providers/interfaces";
+import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput } from "@/app/providers/interfaces";
 import { AxiosInstance } from "axios";
-import { GetBoardOutput, PostTaskInput, PostTaskOutput } from "./types";
+import { GetBoardOutput, PostTaskInput, PostTaskOutput, PutTaskInput } from "./types";
 
 export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
     protected abstract _getHttpClient(): AxiosInstance
@@ -88,6 +88,37 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
                 taskListId: data.taskList.id
             }
         } catch (error: any) {
+            throw new Error(error)
+        }
+    }
+    
+    public async putTask(task: EditTaskInput): Promise<Task> {
+        try {
+
+            const input: PutTaskInput = {
+                id: task.id,
+                title: task.title,
+                description: task.description
+            }
+
+            const response = await this._getHttpClient().put(`/tasks/${task.id}`, input)
+
+            const data = response.data as PostTaskOutput | null
+            if (!data) {
+                throw new Error('Task not updated')
+            }
+
+            return {
+                id: data.id,
+                title: data.title,
+                description: data.description,
+                tags: [],
+                dueDate: new Date(data.createdAt),
+                positionInList: data.positionInTaskList,
+                taskListId: data.taskList.id
+            }
+        }   
+        catch (error: any) {
             throw new Error(error)
         }
     }
