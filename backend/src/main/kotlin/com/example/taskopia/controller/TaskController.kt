@@ -17,5 +17,14 @@ class TaskController(private val taskRepository: TaskRepository) {
     fun createTask(@RequestBody task: Task): Task = taskRepository.save(task)
 
     @PutMapping("")
-    fun updateTask(@RequestBody task: Task): Task = taskRepository.save(task)
+    fun updateTask(@RequestBody task: Task): Task {
+        if(task.id == null ){
+            throw IllegalArgumentException("Id should be provided");
+        }
+        if(taskRepository.findById(task.id!!).isEmpty) {
+            throw IllegalArgumentException("Task Not Found");
+        }
+
+        return taskRepository.save(task)
+    }
 }
