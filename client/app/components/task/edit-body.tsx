@@ -25,7 +25,7 @@ export function TaskEditBody({
           <input
             type="text"
             id={titleInputId}
-            value={task.title}
+            defaultValue={task.title}
             onChange={(e) =>
               setFormTask({ ...formTask, title: e.target.value })
             }
@@ -37,7 +37,7 @@ export function TaskEditBody({
             Description
           </label>
           <textarea
-            value={task.description}
+            defaultValue={task.description}
             id={descriptionInputId}
             onChange={(e) =>
               setFormTask({ ...formTask, description: e.target.value })
