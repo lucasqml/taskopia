@@ -1,4 +1,4 @@
-import { TaskList } from "@/app/types";
+import { type TaskList } from "@/app/types";
 import { Task as TaskComponent } from "@/app/components";
 import { CreateTaskInput } from "../providers/interfaces";
 import { useRef, useState } from "react";
