@@ -15,9 +15,16 @@ export type CreateTaskInput = {
   positionInList: number;
 }
 
+export type EditTaskInput = {
+  id: string;
+  title: string;
+  description: string;
+}
+
 export interface CurrentBoardProvider {
   currentBoard(): QueryOf<Board>;
   createTask(task: CreateTaskInput): Promise<void>;
+  editTask(task: EditTaskInput): Promise<void>;
 }
 
 const CurrentBoardContext = createContext<CurrentBoardProvider>(

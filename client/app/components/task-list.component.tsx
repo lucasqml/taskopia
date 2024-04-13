@@ -1,14 +1,15 @@
 import { type TaskList } from "@/app/types";
 import { Task as TaskComponent } from "@/app/components";
-import { CreateTaskInput } from "../providers/interfaces";
+import { CreateTaskInput, EditTaskInput } from "../providers/interfaces";
 import { useRef, useState } from "react";
 
 type TaskListProps = {
   taskList: TaskList;
   onAddTask: (task: CreateTaskInput) => void;
+  onEditTask: (task: EditTaskInput) => void;
 };
 
-export function TaskList({ taskList, onAddTask }: TaskListProps) {
+export function TaskList({ taskList, onAddTask, onEditTask }: TaskListProps) {
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
 
@@ -56,7 +57,7 @@ export function TaskList({ taskList, onAddTask }: TaskListProps) {
         {taskList.tasks
           .sort((a, b) => a.positionInList - b.positionInList)
           .map((task) => (
-            <TaskComponent key={task.id} task={task} />
+            <TaskComponent key={task.id} task={task} onEditTask={onEditTask} />
           ))}
 
         <form

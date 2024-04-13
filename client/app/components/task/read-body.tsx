@@ -1,6 +1,8 @@
+import { Task } from "@/app/types";
 import { TaskProps } from "./task.component";
 
-type TaskReadBodyProps = TaskProps & {
+type TaskReadBodyProps =  {
+  task: Task;
   onEditButtonClick: () => void;
 };
 

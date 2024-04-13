@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { TaskProps } from "./task.component";
 import { type Task } from "@/app/types";
+import { EditTaskInput } from "@/app/providers/interfaces";
 
-type TaskEditBodyProps = TaskProps & {
+type TaskEditBodyProps =  {
+  task: Task;
   onCancelButtonClick: () => void;
-  onSaveButtonClick: (task: Task) => void;
+  onSaveButtonClick: (task: EditTaskInput) => void;
 };
 
 export function TaskEditBody({

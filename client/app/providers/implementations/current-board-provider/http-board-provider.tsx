@@ -4,6 +4,7 @@ import {
   CreateTaskInput,
   CurrentBoardProvider,
   CurrentUserProvider,
+  EditTaskInput,
 } from "../../interfaces";
 import { QueryOf } from "@/app/types/query";
 import { Board, Task } from "@/app/types";
@@ -95,10 +96,57 @@ export function HttpBoardProvider(
     });
   };
 
+  const optimisticEditTask = async (task: EditTaskInput) => {
+    if (!currentBoardQuery.data) {
+      throw new Error("No board loaded");
+    }
+
+    const currentTask = currentBoardQuery.data.taskLists
+      .flatMap((taskList) => taskList.tasks)
+      .find((t) => t.id === task.id);
+    if (!currentTask) {
+      throw new Error("Task not found");
+    }
+
+    const updatedTask: Task = {
+      ...currentTask,
+      title: task.title,
+      description: task.description,
+    };
+
+    const newBoard: Board = {
+      ...currentBoardQuery.data,
+      taskLists: currentBoardQuery.data.taskLists.map((taskList) => {
+        return {
+          ...taskList,
+          tasks: taskList.tasks.map((t) => {
+            if (t.id === task.id) {
+              return updatedTask;
+            }
+            return t;
+          }),
+        };
+      }),
+    };
+
+    setCurrentBoardQuery({
+      isLoading: false,
+      data: newBoard,
+      error: null,
+    });
+
+    addActionToQueue({
+      type: "EDIT_TASK",
+      actionResult: updatedTask,
+      actionInput: task,
+    });
+  }
+
   return {
     currentBoard: () => {
       return currentBoardQuery;
     },
     createTask: optimisticAddTask,
+    editTask: optimisticEditTask,
   };
 }

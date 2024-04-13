@@ -1,7 +1,7 @@
 "use client";
 
 import { Header, TaskList } from "@/app/components";
-import { CreateTaskInput, CurrentBoardProvider, useCurrentBoardProvider } from "./providers/interfaces";
+import { CreateTaskInput, CurrentBoardProvider, EditTaskInput, useCurrentBoardProvider } from "./providers/interfaces";
 
 type CurrentBoardPageProps = {
   provider: CurrentBoardProvider
@@ -13,6 +13,8 @@ export function CurrentBoardPage({
   const { data: currentBoard, isLoading, error } = provider.currentBoard();
 
   const onAddTask = (task: CreateTaskInput) => provider.createTask(task);
+
+  const onEditTask = (task: EditTaskInput) => provider.editTask(task);
   return (
     <>
       <Header page="home" />
@@ -27,7 +29,7 @@ export function CurrentBoardPage({
                 {currentBoard.taskLists
                   .sort((a, b) => a.positionInBoard - b.positionInBoard)
                   .map((taskList) => (
-                    <TaskList key={taskList.id} taskList={taskList} onAddTask={onAddTask} />
+                    <TaskList key={taskList.id} taskList={taskList} onAddTask={onAddTask} onEditTask={onEditTask} />
                   ))}
               </div>
             </>

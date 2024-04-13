@@ -1,5 +1,5 @@
 import { Board, Task } from "@/app/types";
-import { BoardAPI, CreateTaskInput } from "@/app/providers/interfaces";
+import { BoardAPI, CreateTaskInput, EditTaskInput } from "@/app/providers/interfaces";
 import { QueryOf } from "@/app/types/query";
 import { useEffect, useState } from "react";
 
@@ -9,7 +9,13 @@ type AddTaskAction = {
     actionInput: CreateTaskInput;
 };
 
-type BoardAction = AddTaskAction;
+type EditTaskAction = {
+    type: "EDIT_TASK";
+    actionResult: Task;
+    actionInput: EditTaskInput;
+};
+
+type BoardAction = AddTaskAction | EditTaskAction;
 
 type BoardProviderActionsHandlerData = {
     currentBoardQuery: QueryOf<Board>;
@@ -79,6 +85,9 @@ export function BoardProviderActionsHandler({
                 switch (action.type) {
                     case "ADD_TASK":
                         await processAddTaskAction(action);
+                        break;
+                    case "EDIT_TASK":
+                        // TODO implement edit task action
                         break;
                 }
 
