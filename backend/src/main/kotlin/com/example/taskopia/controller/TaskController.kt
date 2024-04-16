@@ -18,7 +18,7 @@ class TaskController(private val taskRepository: TaskRepository, private val tas
     @PostMapping("")
     fun createTask(@RequestBody task: Task): Task = taskRepository.save(task)
 
-    @PutMapping("/{taskID}")
+    @PutMapping("/{taskId}")
     fun updateTask(@PathVariable taskId: Long, @RequestBody task: UpdateTaskDto): Task {
         return taskService.updateData(taskId, task)
     }
