@@ -1,5 +1,5 @@
 import { Board, Task } from "@/app/types";
-import { BoardAPI, CreateTaskInput } from "@/app/providers/interfaces";
+import { BoardAPI, CreateTaskInput, EditTaskInput } from "@/app/providers/interfaces";
 import { QueryOf } from "@/app/types/query";
 import { useEffect, useState } from "react";
 
@@ -9,7 +9,13 @@ type AddTaskAction = {
     actionInput: CreateTaskInput;
 };
 
-type BoardAction = AddTaskAction;
+type EditTaskAction = {
+    type: "EDIT_TASK";
+    actionResult: Task;
+    actionInput: EditTaskInput;
+};
+
+type BoardAction = AddTaskAction | EditTaskAction;
 
 type BoardProviderActionsHandlerData = {
     currentBoardQuery: QueryOf<Board>;
@@ -70,6 +76,45 @@ export function BoardProviderActionsHandler({
         }
     }
 
+    async function processEditTaskAction(action: EditTaskAction) {
+        // actually send the request to the server
+        try {
+            const task = action.actionInput;
+            const optimisticTask = action.actionResult;
+            const editedTask = await boardAPI.putTask(task);
+            if (!currentBoardQuery.data) {
+                throw new Error("No board loaded");
+            }
+            const board: Board = currentBoardQuery.data;
+
+            // update the task with the server response
+            const updatedBoard = {
+                ...currentBoardQuery.data,
+                taskLists: board.taskLists.map((taskList) => {
+                    return {
+                        ...taskList,
+                        tasks: taskList.tasks.map((task) => {
+                            if (task.id === optimisticTask.id) {
+                                return editedTask;
+                            }
+                            return task;
+                        }),
+                    };
+                }),
+            };
+
+            setBoardQueryState({
+                isLoading: false,
+                data: updatedBoard,
+                error: null,
+            });
+        } catch (error: any) {
+            // TODO throw better error
+            throw error;
+        }
+    
+    }
+
     useEffect(() => {
         async function processActions() {
             if (actionsQueue.length === 0) return;
@@ -79,6 +124,9 @@ export function BoardProviderActionsHandler({
                 switch (action.type) {
                     case "ADD_TASK":
                         await processAddTaskAction(action);
+                        break;
+                    case "EDIT_TASK":
+                        await processEditTaskAction(action);
                         break;
                 }
 

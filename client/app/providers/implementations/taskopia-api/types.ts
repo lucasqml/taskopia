@@ -30,6 +30,11 @@ export type PostTaskInput = {
     positionInTaskList: number;
 }
 
+export type PutTaskInput = {
+    title: string;
+    description: string;
+}
+
 export type PostTaskOutput = {
     id: string;
     taskList: {
@@ -41,3 +46,5 @@ export type PostTaskOutput = {
     createdAt: string;
     doneAt: string | null;
 }
+
+export type PutTaskOutput = PostTaskOutput

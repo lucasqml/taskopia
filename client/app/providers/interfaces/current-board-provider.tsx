@@ -6,6 +6,7 @@ import { NotImplementedCurrentBoardProvider } from "../implementations/not-imple
 export interface BoardAPI {
   getBoard(id: string): Promise<Board>;
   postTask(task: CreateTaskInput): Promise<Task>;
+  putTask(task: EditTaskInput): Promise<Task>;
 }
 
 export type CreateTaskInput = {
@@ -15,9 +16,16 @@ export type CreateTaskInput = {
   positionInList: number;
 }
 
+export type EditTaskInput = {
+  id: string;
+  title: string;
+  description: string;
+}
+
 export interface CurrentBoardProvider {
   currentBoard(): QueryOf<Board>;
   createTask(task: CreateTaskInput): Promise<void>;
+  editTask(task: EditTaskInput): Promise<void>;
 }
 
 const CurrentBoardContext = createContext<CurrentBoardProvider>(
