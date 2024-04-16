@@ -96,7 +96,6 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
         try {
 
             const input: PutTaskInput = {
-                id: task.id,
                 title: task.title,
                 description: task.description
             }

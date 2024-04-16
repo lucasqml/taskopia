@@ -31,7 +31,6 @@ export type PostTaskInput = {
 }
 
 export type PutTaskInput = {
-    id: string;
     title: string;
     description: string;
 }
