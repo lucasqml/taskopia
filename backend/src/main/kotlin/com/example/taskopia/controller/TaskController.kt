@@ -22,4 +22,9 @@ class TaskController(private val taskRepository: TaskRepository, private val tas
     fun updateTask(@PathVariable taskId: Long, @RequestBody task: UpdateTaskDto): Task {
         return taskService.updateData(taskId, task)
     }
+
+    @PutMapping("/move/{taskId}")
+    fun moveTask(@PathVariable taskId: Long, @RequestParam targetTaskListId: Long): Task {
+        return taskService.moveTask(taskId, targetTaskListId)
+    }
 }
