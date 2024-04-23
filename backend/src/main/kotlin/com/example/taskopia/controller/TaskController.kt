@@ -27,4 +27,10 @@ class TaskController(private val taskRepository: TaskRepository, private val tas
     fun moveTask(@PathVariable taskId: Long, @RequestParam targetTaskListId: Long): Task {
         return taskService.moveTask(taskId, targetTaskListId)
     }
+
+    @DeleteMapping("/{taskId}")
+    fun deleteTask(@PathVariable taskId: Long) {
+        taskService.deleteTask(taskId)
+    }
+
 }
