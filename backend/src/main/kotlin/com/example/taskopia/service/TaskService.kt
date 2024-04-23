@@ -37,4 +37,8 @@ class TaskService (private val taskRepository: TaskRepository, private val taskL
 
         return taskRepository.save(taskFound)
     }
+
+    fun deleteTask(taskId: Long) {
+        taskRepository.deleteById(taskId)
+    }
 }
