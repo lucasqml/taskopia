@@ -15,7 +15,7 @@ export function Task({ task, onEditTask }: TaskProps) {
   return (
     <li
       key={task.id}
-      className="flex flex-col justify-between gap-1 min-h-30 bg-gray-100 p-2 pt-3 rounded"
+      className="flex flex-col justify-between gap-1 bg-gray-100  rounded"
     >
       {!isEditing && (
         <TaskReadBody

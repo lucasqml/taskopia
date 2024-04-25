@@ -53,7 +53,7 @@ export function TaskReadBody({ task, onEditButtonClick }: TaskReadBodyProps) {
 
   
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 min-h-20 max-h-20 p-2 pt-3">
       <header className="flex flex-row justify-between">
         <h4 className="text-cyan-600">{task.title}</h4>
         <button onClick={onEditButtonClick} className="bg-gray-300 p-1 rounded min-w-16 max-h-8">

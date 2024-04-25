@@ -1,4 +1,4 @@
-import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import { FaAngleDoubleLeft, FaAngleDoubleRight, FaPlus } from "react-icons/fa";
 
 export function RightArrowIcon() {
   return <FaAngleDoubleRight />;
@@ -6,4 +6,8 @@ export function RightArrowIcon() {
 
 export function LeftArrowIcon() {
   return <FaAngleDoubleLeft />;
+}
+
+export function AddIcon() {
+  return <FaPlus />;
 }
