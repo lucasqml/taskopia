@@ -5,6 +5,7 @@ import {
   CurrentBoardProvider,
   CurrentUserProvider,
   EditTaskInput,
+  MoveTaskInput,
 } from "../../interfaces";
 import { QueryOf } from "@/app/types/query";
 import { Board, Task } from "@/app/types";
@@ -142,11 +143,77 @@ export function HttpBoardProvider(
     });
   }
 
+  const optimisticMoveTask = async (task: MoveTaskInput) => {
+    if (!currentBoardQuery.data) {
+      throw new Error("No board loaded");
+    }
+
+    const currentTask = currentBoardQuery.data.taskLists
+      .flatMap((taskList) => taskList.tasks)
+      .find((t) => t.id === task.taskId);
+    if (!currentTask) {
+      throw new Error("Task not found");
+    }
+    
+    const oldList = currentBoardQuery.data.taskLists.find(
+      (tl) => tl.id === task.originTaskListId
+    );
+
+    const targetList = currentBoardQuery.data.taskLists.find(
+      (tl) => tl.id === task.destinationTaskListId
+    );
+    const newPosition = targetList?.tasks.length || 0;
+
+    const updatedTask: Task = {
+      ...currentTask,
+      taskListId: task.destinationTaskListId,
+      positionInList: newPosition
+    };
+
+
+    if (!oldList || !targetList) {
+      throw new Error("Task list not found");
+    }
+
+
+    const newBoard: Board = {
+      ...currentBoardQuery.data,
+      taskLists: currentBoardQuery.data.taskLists.map((taskList) => {
+        if (taskList.id === task.originTaskListId) {
+          return {
+            ...taskList,
+            tasks: taskList.tasks.filter((t) => t.id !== task.taskId),
+          };
+        }
+        if (taskList.id === task.destinationTaskListId) {
+          return {
+            ...taskList,
+            tasks: [...taskList.tasks, updatedTask],
+          };
+        }
+        return taskList;
+      }),
+    };
+
+    setCurrentBoardQuery({
+      isLoading: false,
+      data: newBoard,
+      error: null,
+    });
+
+    // addActionToQueue({
+    //   type: "MOVE_TASK",
+    //   actionResult: updatedTask,
+    //   actionInput: task,
+    // });
+  }
+
   return {
     currentBoard: () => {
       return currentBoardQuery;
     },
     createTask: optimisticAddTask,
     editTask: optimisticEditTask,
+    moveTask: optimisticMoveTask,
   };
 }
