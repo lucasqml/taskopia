@@ -1,6 +1,7 @@
 package com.example.taskopia.service
 
 import com.example.taskopia.model.Task
+import com.example.taskopia.model.dto.MoveTaskDto
 import com.example.taskopia.model.dto.UpdateTaskDto
 import com.example.taskopia.repository.TaskListRepository
 import com.example.taskopia.repository.TaskRepository
@@ -23,8 +24,11 @@ class TaskService (private val taskRepository: TaskRepository, private val taskL
         return taskRepository.save(taskFound)
     }
 
-    fun moveTask(taskId: Long, targetTaskListId: Long): Task {
+    fun moveTask(taskId: Long, moveTaskDto: MoveTaskDto): Task {
         val taskOptional = taskRepository.findById(taskId)
+        val targetTaskListId = moveTaskDto.targetTaskListId
+        val positionInTaskList = moveTaskDto.positionInTaskList
+
         val targetTaskListOptional = taskListRepository.findById(targetTaskListId)
         if(taskOptional.isEmpty || targetTaskListOptional.isEmpty) {
             throw IllegalArgumentException("Task Not Found");
@@ -34,6 +38,7 @@ class TaskService (private val taskRepository: TaskRepository, private val taskL
         val targetTaskList = targetTaskListOptional.get()
 
         taskFound.taskList = targetTaskList
+        taskFound.positionInTaskList = positionInTaskList
 
         return taskRepository.save(taskFound)
     }

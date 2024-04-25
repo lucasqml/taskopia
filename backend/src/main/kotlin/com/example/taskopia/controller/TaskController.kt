@@ -2,6 +2,7 @@
 package com.example.taskopia.controller
 
 import com.example.taskopia.model.Task
+import com.example.taskopia.model.dto.MoveTaskDto
 import com.example.taskopia.model.dto.UpdateTaskDto
 import com.example.taskopia.repository.TaskRepository
 import com.example.taskopia.service.TaskService
@@ -24,8 +25,8 @@ class TaskController(private val taskRepository: TaskRepository, private val tas
     }
 
     @PutMapping("/move/{taskId}")
-    fun moveTask(@PathVariable taskId: Long, @RequestParam targetTaskListId: Long): Task {
-        return taskService.moveTask(taskId, targetTaskListId)
+    fun moveTask(@PathVariable taskId: Long, @RequestBody moveTaskDto: MoveTaskDto): Task {
+        return taskService.moveTask(taskId, moveTaskDto)
     }
 
     @DeleteMapping("/{taskId}")
