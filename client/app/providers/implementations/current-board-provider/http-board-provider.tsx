@@ -162,12 +162,10 @@ export function HttpBoardProvider(
     const targetList = currentBoardQuery.data.taskLists.find(
       (tl) => tl.id === task.destinationTaskListId
     );
-    const newPosition = targetList?.tasks.length || 0;
 
     const updatedTask: Task = {
       ...currentTask,
       taskListId: task.destinationTaskListId,
-      positionInList: newPosition
     };
 
 
@@ -201,11 +199,11 @@ export function HttpBoardProvider(
       error: null,
     });
 
-    // addActionToQueue({
-    //   type: "MOVE_TASK",
-    //   actionResult: updatedTask,
-    //   actionInput: task,
-    // });
+    addActionToQueue({
+      type: "MOVE_TASK",
+      actionResult: updatedTask,
+      actionInput: task,
+    });
   }
 
   return {

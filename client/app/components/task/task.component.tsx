@@ -16,7 +16,7 @@ export function Task({ task, onEditTask }: TaskProps) {
     currentBoard
   } = useCurrentBoardProvider();
 
-  function getNextTaskListId() {
+  function onMoveTaskClick() {
     const currentBoardData = currentBoard().data;
     if (!currentBoardData) {
       throw new Error('Board not found');
@@ -24,7 +24,16 @@ export function Task({ task, onEditTask }: TaskProps) {
     const sortedTaskLists = currentBoardData.taskLists.sort((a, b) => a.positionInBoard - b.positionInBoard);
     const currentTaskListIndex = sortedTaskLists.findIndex(taskList => taskList.id === task.taskListId);
     const nextTaskList = sortedTaskLists[currentTaskListIndex + 1];
-    return nextTaskList.id;
+    const newPositionInList = nextTaskList.tasks.length;
+    const input = {
+      taskId: task.id,
+      originTaskListId: task.taskListId,
+      destinationTaskListId: nextTaskList.id,
+      positionInList: newPositionInList
+    }
+
+    moveTask(input);
+    
   }
   return (
     <li
@@ -33,12 +42,7 @@ export function Task({ task, onEditTask }: TaskProps) {
     >
       <button
         className="bg-blue-500 text-white rounded p-1"
-        onClick={() => moveTask({
-          taskId: task.id,
-          originTaskListId: task.taskListId,
-          destinationTaskListId: getNextTaskListId(),
-          positionInList: task.positionInList + 1
-        })}
+        onClick={() => onMoveTaskClick()}
       >Move</button>
       {!isEditing && (
         <TaskReadBody
