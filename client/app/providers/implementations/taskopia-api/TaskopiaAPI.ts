@@ -1,9 +1,10 @@
 import { Board, Task } from "@/app/types";
-import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput } from "@/app/providers/interfaces";
+import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput, MoveTaskInput } from "@/app/providers/interfaces";
 import { AxiosInstance } from "axios";
-import { GetBoardOutput, PostTaskInput, PostTaskOutput, PutTaskInput } from "./types";
+import { GetBoardOutput, PostTaskInput, PostTaskOutput, PutMoveTaskInput, PutMoveTaskOutput, PutTaskInput } from "./types";
 
 export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
+    
     protected abstract _getHttpClient(): AxiosInstance
 
     public async getUser(id: string) {
@@ -118,6 +119,35 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
             }
         }   
         catch (error: any) {
+            throw new Error(error)
+        }
+    }
+
+    public async moveTask(task: MoveTaskInput): Promise<Task> {
+        try {
+            const input: PutMoveTaskInput = {
+                positionInTaskList: task.positionInList,
+                targetTaskListId: parseInt(task.destinationTaskListId)
+            }
+
+            const response = await this._getHttpClient().put(`/tasks/move/${task.taskId}`, input)
+
+            const data = response.data as PutMoveTaskOutput | null
+
+            if (!data) {
+                throw new Error('Task not moved')
+            }
+
+            return {
+                id: data.id,
+                title: data.title,
+                description: data.description,
+                tags: [],
+                dueDate: new Date(data.createdAt),
+                positionInList: data.positionInTaskList,
+                taskListId: data.taskList.id
+            }
+        } catch (error: any) {
             throw new Error(error)
         }
     }
