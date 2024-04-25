@@ -58,7 +58,7 @@ export function TaskEditBody({
           onClick={() => onSaveButtonClick(formTask)}
           className="bg-green-600 py-2 px-5 rounded text-white"
         >
-          Save Changes
+          Save
         </button>
       </footer>
     </>
