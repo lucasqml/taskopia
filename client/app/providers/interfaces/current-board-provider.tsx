@@ -7,6 +7,7 @@ export interface BoardAPI {
   getBoard(id: string): Promise<Board>;
   postTask(task: CreateTaskInput): Promise<Task>;
   putTask(task: EditTaskInput): Promise<Task>;
+  moveTask(task: MoveTaskInput): Promise<Task>;
 }
 
 export type CreateTaskInput = {
@@ -22,10 +23,18 @@ export type EditTaskInput = {
   description: string;
 }
 
+export type MoveTaskInput = {
+  taskId: string;
+  originTaskListId: string;
+  destinationTaskListId: string;
+  positionInList: number;
+}
+
 export interface CurrentBoardProvider {
   currentBoard(): QueryOf<Board>;
   createTask(task: CreateTaskInput): Promise<void>;
   editTask(task: EditTaskInput): Promise<void>;
+  moveTask(task: MoveTaskInput): Promise<void>;
 }
 
 const CurrentBoardContext = createContext<CurrentBoardProvider>(

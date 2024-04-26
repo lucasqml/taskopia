@@ -48,12 +48,12 @@ export function TaskList({ taskList, onAddTask, onEditTask }: TaskListProps) {
         </h3>
         <button
           onClick={onAddButtonClick}
-          className="bg-white text-black p-2 rounded"
+          className="bg-white p-2 rounded text-blue-400"
         >
           Add Task
         </button>
       </div>
-      <ul className="flex flex-col gap-2 h-full overflow-y-auto">
+      <ul className="flex flex-col gap-2 h-full overflow-y-auto sticky bottom-0">
         {taskList.tasks
           .sort((a, b) => a.positionInList - b.positionInList)
           .map((task) => (
@@ -61,20 +61,23 @@ export function TaskList({ taskList, onAddTask, onEditTask }: TaskListProps) {
           ))}
 
         <form
-          className="flex flex-col gap-2 w-full justify-end"
+          className="flex flex-col gap-2 w-full justify-end p-0"
           onSubmit={(e) => {
             e.preventDefault();
             onFormSubmit();
           }}
         >
-          <input
-            type="text"
-            placeholder="Task title"
-            onChange={(e) => setTaskTitle(e.target.value)}
-            ref={createInputRef}
-          />
-          <button type="submit" className="bg-red-400 text-black p-2 rounded">
-            Create Task
+          <div className="rounded border-2 bg-white min-h-20 max-h-20">
+            <input
+              className="min-h-10 p-2 w-full border-none bg-transparent focus:outline-none text-pink-500"
+              type="text"
+              placeholder="Task title"
+              onChange={(e) => setTaskTitle(e.target.value)}
+              ref={createInputRef}
+            />
+          </div>
+          <button type="submit" className="p-2 rounded bg-green-500 text-white">
+            Add Task
           </button>
         </form>
       </ul>

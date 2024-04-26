@@ -18,8 +18,8 @@ export function TaskEditBody({
   const titleInputId = `task-title-${task.id}`;
   const descriptionInputId = `task-description-${task.id}`;
   return (
-    <>
-      <main className="flex flex-col gap-2">
+    <div className="p-2 pt-3">
+      <main className="flex flex-col gap-2 ">
         <div className="flex flex-col gap-1">
           <label className="text-cyan-600" htmlFor={titleInputId}>
             Title
@@ -58,9 +58,9 @@ export function TaskEditBody({
           onClick={() => onSaveButtonClick(formTask)}
           className="bg-green-600 py-2 px-5 rounded text-white"
         >
-          Save Changes
+          Save
         </button>
       </footer>
-    </>
+    </div>
   );
 }

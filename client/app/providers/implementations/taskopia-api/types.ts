@@ -35,6 +35,12 @@ export type PutTaskInput = {
     description: string;
 }
 
+export type PutMoveTaskInput = {
+    targetTaskListId: number,
+    positionInTaskList: number
+}
+
+
 export type PostTaskOutput = {
     id: string;
     taskList: {
@@ -48,3 +54,5 @@ export type PostTaskOutput = {
 }
 
 export type PutTaskOutput = PostTaskOutput
+
+export type PutMoveTaskOutput = PutTaskOutput

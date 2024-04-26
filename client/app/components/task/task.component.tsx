@@ -11,12 +11,11 @@ export type TaskProps = {
 
 export function Task({ task, onEditTask }: TaskProps) {
   const [isEditing, setIsEditing] = useState(false);
-
-
+  
   return (
     <li
       key={task.id}
-      className="flex flex-col justify-between gap-1 min-h-20 bg-gray-100 p-2 pt-3 rounded"
+      className="flex flex-col justify-between gap-1 bg-gray-100  rounded"
     >
       {!isEditing && (
         <TaskReadBody
