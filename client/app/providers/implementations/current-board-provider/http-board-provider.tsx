@@ -4,6 +4,7 @@ import {
   CreateTaskInput,
   CurrentBoardProvider,
   CurrentUserProvider,
+  DeleteTaskInput,
   EditTaskInput,
   MoveTaskInput,
 } from "../../interfaces";
@@ -206,6 +207,34 @@ export function HttpBoardProvider(
     });
   }
 
+  const optimisticDeleteTask = async (input: DeleteTaskInput) => {
+    if (!currentBoardQuery.data) {
+      throw new Error("No board loaded");
+    }
+
+    const newBoard: Board = {
+      ...currentBoardQuery.data,
+      taskLists: currentBoardQuery.data.taskLists.map((taskList) => {
+        return {
+          ...taskList,
+          tasks: taskList.tasks.filter((t) => t.id !== input.taskId),
+        };
+      }),
+    };
+
+    setCurrentBoardQuery({
+      isLoading: false,
+      data: newBoard,
+      error: null,
+    });
+
+    addActionToQueue({
+      type: "DELETE_TASK",
+      actionInput: input,
+    });
+  
+  }
+
   return {
     currentBoard: () => {
       return currentBoardQuery;
@@ -213,5 +242,6 @@ export function HttpBoardProvider(
     createTask: optimisticAddTask,
     editTask: optimisticEditTask,
     moveTask: optimisticMoveTask,
+    deleteTask: optimisticDeleteTask,
   };
 }

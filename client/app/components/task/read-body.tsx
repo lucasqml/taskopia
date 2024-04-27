@@ -1,5 +1,4 @@
 import { Task } from "@/app/types";
-import { TaskProps } from "./task.component";
 import { DeleteIcon, EditIcon, LeftArrowIcon, RightArrowIcon } from "@/app/icons";
 import { useCurrentBoardProvider } from "@/app/providers/interfaces";
 
@@ -9,7 +8,7 @@ type TaskReadBodyProps = {
 };
 
 export function TaskReadBody({ task, onEditButtonClick }: TaskReadBodyProps) {
-  const { moveTask, currentBoard } = useCurrentBoardProvider();
+  const { moveTask, currentBoard, deleteTask } = useCurrentBoardProvider();
   const boardQuery = currentBoard();
   if (boardQuery.isLoading) {
     return <div>Loading...</div>;
@@ -57,8 +56,7 @@ export function TaskReadBody({ task, onEditButtonClick }: TaskReadBodyProps) {
       taskId: task.id,
     };
 
-    // deleteTask(input);
-    console.log("delete task", input);
+    deleteTask(input);
   }
 
   return (

@@ -1,7 +1,7 @@
 import { QueryOf } from "@/app/types/query";
 import { Board, User } from "@/app/types";
 import { CurrentUserProvider } from "../interfaces/current-user-provider";
-import { CreateTaskInput, CurrentBoardProvider, EditTaskInput, MoveTaskInput } from "../interfaces/current-board-provider";
+import { CreateTaskInput, CurrentBoardProvider, DeleteTaskInput, EditTaskInput, MoveTaskInput } from "../interfaces/current-board-provider";
 
 export class NotImplementedCurrentBoardProvider implements CurrentBoardProvider {
     currentBoard(): QueryOf<Board> {
@@ -19,6 +19,10 @@ export class NotImplementedCurrentBoardProvider implements CurrentBoardProvider 
     moveTask(task: MoveTaskInput): Promise<void> {
         throw new Error("Method not implemented.");
     
+    }
+
+    deleteTask(task: DeleteTaskInput): Promise<void> {
+        throw new Error("Method not implemented.");
     }
 }
 

@@ -8,6 +8,7 @@ export interface BoardAPI {
   postTask(task: CreateTaskInput): Promise<Task>;
   putTask(task: EditTaskInput): Promise<Task>;
   moveTask(task: MoveTaskInput): Promise<Task>;
+  deleteTask(task: DeleteTaskInput): Promise<void>;
 }
 
 export type CreateTaskInput = {
@@ -30,11 +31,16 @@ export type MoveTaskInput = {
   positionInList: number;
 }
 
+export type DeleteTaskInput = {
+  taskId: string;
+}
+
 export interface CurrentBoardProvider {
   currentBoard(): QueryOf<Board>;
-  createTask(task: CreateTaskInput): Promise<void>;
-  editTask(task: EditTaskInput): Promise<void>;
-  moveTask(task: MoveTaskInput): Promise<void>;
+  createTask(input: CreateTaskInput): Promise<void>;
+  editTask(input: EditTaskInput): Promise<void>;
+  moveTask(input: MoveTaskInput): Promise<void>;
+  deleteTask(input: DeleteTaskInput): Promise<void>;
 }
 
 const CurrentBoardContext = createContext<CurrentBoardProvider>(

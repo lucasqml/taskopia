@@ -1,5 +1,5 @@
 import { Board, Task } from "@/app/types";
-import { BoardAPI, CreateTaskInput, EditTaskInput, MoveTaskInput } from "@/app/providers/interfaces";
+import { BoardAPI, CreateTaskInput, DeleteTaskInput, EditTaskInput, MoveTaskInput } from "@/app/providers/interfaces";
 import { QueryOf } from "@/app/types/query";
 import { useEffect, useState } from "react";
 
@@ -21,7 +21,12 @@ type MoveTaskAction = {
     actionInput: MoveTaskInput;
 };
 
-type BoardAction = AddTaskAction | EditTaskAction | MoveTaskAction;
+type DeleteTaskAction = {
+    type: "DELETE_TASK";
+    actionInput: DeleteTaskInput;
+};
+
+type BoardAction = AddTaskAction | EditTaskAction | MoveTaskAction | DeleteTaskAction;
 
 type BoardProviderActionsHandlerData = {
     currentBoardQuery: QueryOf<Board>;
@@ -157,7 +162,17 @@ export function BoardProviderActionsHandler({
             // TODO throw better error
             throw error;
         }
-    
+    }
+
+    async function processDeleteTaskAction(action: DeleteTaskAction) {
+        // actually send the request to the server
+        try {
+            await boardAPI.deleteTask(action.actionInput)
+            
+        } catch (error: any) {
+            // TODO throw better error
+            throw error;
+        }
     }
 
 
@@ -176,6 +191,9 @@ export function BoardProviderActionsHandler({
                         break;
                     case "MOVE_TASK":
                         await processMoveTaskAction(action);
+                        break;
+                    case "DELETE_TASK":
+                        await processDeleteTaskAction(action);
                         break;
                 }
 
