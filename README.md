@@ -31,5 +31,5 @@ This project is fully dockerized, thus the only required dependency to execute i
 Simply run the following at the root directory:
 
 ```bash
-docker compose up
+make all
 ```
