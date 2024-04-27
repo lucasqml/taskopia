@@ -1,6 +1,6 @@
 import { Task } from "@/app/types";
 import { TaskProps } from "./task.component";
-import { LeftArrowIcon, RightArrowIcon } from "@/app/icons";
+import { DeleteIcon, EditIcon, LeftArrowIcon, RightArrowIcon } from "@/app/icons";
 import { useCurrentBoardProvider } from "@/app/providers/interfaces";
 
 type TaskReadBodyProps = {
@@ -22,7 +22,8 @@ export function TaskReadBody({ task, onEditButtonClick }: TaskReadBodyProps) {
     (taskList) => taskList.id === task.taskListId
   );
 
-  const isLastTaskList = currentTaskListIndex === boardQuery.data.taskLists.length - 1;
+  const isLastTaskList =
+    currentTaskListIndex === boardQuery.data.taskLists.length - 1;
   const isFirstTaskList = currentTaskListIndex === 0;
 
   const onMoveTaskClick = (direction: "forward" | "backward") => {
@@ -51,14 +52,33 @@ export function TaskReadBody({ task, onEditButtonClick }: TaskReadBodyProps) {
     moveTask(input);
   };
 
-  
+  const onDeleteButtonClick = () => {
+    const input = {
+      taskId: task.id,
+    };
+
+    // deleteTask(input);
+    console.log("delete task", input);
+  }
+
   return (
     <div className="flex flex-col gap-1 min-h-20 max-h-20 p-2 pt-3">
       <header className="flex flex-row justify-between">
         <h4 className="text-cyan-600">{task.title}</h4>
-        <button onClick={onEditButtonClick} className="bg-gray-300 p-1 rounded min-w-16 max-h-8">
-          Edit
-        </button>
+        <div className="flex flex-row gap-1">
+          <button
+            onClick={onEditButtonClick}
+            className="bg-gray-300 text-gray-700 p-1 rounded min-w-16 max-h-8 flex items-center justify-center " 
+          >
+            <EditIcon />
+          </button>
+          <button
+            onClick={onDeleteButtonClick}
+            className="bg-red-500 text-white p-1 rounded min-w-16 max-h-8 flex items-center justify-center"
+          >
+            <DeleteIcon />
+          </button>
+        </div>
       </header>
       <div className="flex flex-row gap-1">
         {task.tags.map((tag) => (
@@ -79,16 +99,14 @@ export function TaskReadBody({ task, onEditButtonClick }: TaskReadBodyProps) {
             <LeftArrowIcon />
           </button>
         )}
-        {
-          !isLastTaskList && (
-            <button
-              className="bg-blue-500 text-white p-1 rounded ml-auto"
-              onClick={() => onMoveTaskClick("forward")}
-            >
-              <RightArrowIcon />
-            </button>
-          )
-        }
+        {!isLastTaskList && (
+          <button
+            className="bg-blue-500 text-white p-1 rounded ml-auto"
+            onClick={() => onMoveTaskClick("forward")}
+          >
+            <RightArrowIcon />
+          </button>
+        )}
       </footer>
     </div>
   );
