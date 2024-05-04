@@ -8,12 +8,20 @@ import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
 import org.junit.ClassRule
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 class TaskServiceIntegrationTests @Autowired constructor(private val taskService: TaskService, private val taskRepository: TaskRepository){
+
+    @BeforeEach
+    @Transactional
+    fun cleanUp() {
+        taskRepository.deleteAll()
+    }
 
     @Test
     fun `should throw exception when task doesn't not exist`() {
@@ -36,8 +44,7 @@ class TaskServiceIntegrationTests @Autowired constructor(private val taskService
 
 //    @Test
 //    fun `should throw exception when task doesn't not exists`() {
-//        taskService.updateData(1, UpdateTaskDto("", ""))
-//            .andExpect{
+//        taskService.updateData(1, UpdateTaskDto("", "")).andExpect{
 //                result -> assertTrue(result.resolvedException is IllegalArgumentException)
 //            }
 //
