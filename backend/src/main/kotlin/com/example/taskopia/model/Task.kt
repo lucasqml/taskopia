@@ -31,4 +31,12 @@ class Task {
 
     @Column(name = "done_at")
     var doneAt: LocalDateTime? = null
+
+    constructor(){}
+
+    constructor(title: String, description: String, positionInTaskList: Int) {
+        this.title = title
+        this.description = description
+        this.positionInTaskList = positionInTaskList
+    }
 }
