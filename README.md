@@ -33,3 +33,11 @@ Simply run the following at the root directory:
 ```bash
 make all
 ```
+
+### Integration Tests
+
+To run the backend integration tests, run:
+
+```bash
+make backend-integration-tests
+```
