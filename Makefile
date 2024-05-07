@@ -8,7 +8,7 @@ backend:
 	docker compose up database backend --build
 
 backend-integration-tests:
-	docker compose up backend-tests 
+	docker compose up backend-integration-tests 
 
 frontend:
 	docker compose up frontend

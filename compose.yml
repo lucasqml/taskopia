@@ -26,9 +26,9 @@ services:
       - ./backend:/backend
     command: mvn spring-boot:run
 
-  backend-tests:
+  backend-integration-tests:
     image: maven:3
-    container_name: taskopia-backend-tests
+    container_name: taskopia-backend-integration-tests
     stop_signal: SIGKILL
     stdin_open: true
     tty: true
@@ -36,7 +36,7 @@ services:
     volumes:
       - ./backend:/backend
       - /var/run/docker.sock:/var/run/docker.sock
-    command: bash -c "mvn test && exit"
+    command: bash -c "mvn -Dtest=*IntegrationTests test && exit"
 
   frontend:
     container_name: taskopia-frontend
