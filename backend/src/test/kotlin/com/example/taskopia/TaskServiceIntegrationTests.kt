@@ -42,14 +42,6 @@ class TaskServiceIntegrationTests @Autowired constructor(private val taskService
         assertTrue(task.description == "newDescription")
     }
 
-//    @Test
-//    fun `should throw exception when task doesn't not exists`() {
-//        taskService.updateData(1, UpdateTaskDto("", "")).andExpect{
-//                result -> assertTrue(result.resolvedException is IllegalArgumentException)
-//            }
-//
-//    }
-
     companion object {
         @JvmField
         @ClassRule
