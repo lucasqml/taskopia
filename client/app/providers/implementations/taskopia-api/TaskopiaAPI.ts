@@ -1,5 +1,5 @@
-import { Board, Task } from "@/app/types";
-import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput, MoveTaskInput, DeleteTaskInput } from "@/app/providers/interfaces";
+import { Board, Task, TaskList } from "@/app/types";
+import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput, MoveTaskInput, DeleteTaskInput, CreateListInput } from "@/app/providers/interfaces";
 import { AxiosInstance } from "axios";
 import { GetBoardOutput, PostTaskInput, PostTaskOutput, PutMoveTaskInput, PutMoveTaskOutput, PutTaskInput } from "./types";
 
@@ -159,6 +159,10 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
             throw new Error(error)
         }
 
+    }
+
+    public  async createList(input: CreateListInput): Promise<TaskList> {
+        throw new Error("Method not implemented.");
     }
 
 }

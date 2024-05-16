@@ -1,5 +1,5 @@
-import { Board, Task } from "@/app/types";
-import { BoardAPI, CreateTaskInput, DeleteTaskInput, EditTaskInput, MoveTaskInput } from "@/app/providers/interfaces";
+import { Board, Task, TaskList } from "@/app/types";
+import { BoardAPI, CreateListInput, CreateTaskInput, DeleteTaskInput, EditTaskInput, MoveTaskInput } from "@/app/providers/interfaces";
 import { QueryOf } from "@/app/types/query";
 import { useEffect, useState } from "react";
 
@@ -26,7 +26,13 @@ type DeleteTaskAction = {
     actionInput: DeleteTaskInput;
 };
 
-type BoardAction = AddTaskAction | EditTaskAction | MoveTaskAction | DeleteTaskAction;
+type CreateListAction = {
+    type: "CREATE_LIST";
+    actionResult: TaskList;
+    actionInput: CreateListInput;
+};
+
+type BoardAction = AddTaskAction | EditTaskAction | MoveTaskAction | DeleteTaskAction | CreateListAction;
 
 type BoardProviderActionsHandlerData = {
     currentBoardQuery: QueryOf<Board>;
@@ -194,6 +200,8 @@ export function BoardProviderActionsHandler({
                         break;
                     case "DELETE_TASK":
                         await processDeleteTaskAction(action);
+                    case "CREATE_LIST":
+                        // TODO implement create list
                         break;
                 }
 

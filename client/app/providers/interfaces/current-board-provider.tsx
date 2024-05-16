@@ -1,4 +1,4 @@
-import { Board, Task } from "@/app/types";
+import { Board, Task, TaskList } from "@/app/types";
 import { QueryOf } from "@/app/types/query";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { NotImplementedCurrentBoardProvider } from "../implementations/not-implemented-providers";
@@ -9,6 +9,7 @@ export interface BoardAPI {
   putTask(task: EditTaskInput): Promise<Task>;
   moveTask(task: MoveTaskInput): Promise<Task>;
   deleteTask(task: DeleteTaskInput): Promise<void>;
+  createList(input: CreateListInput): Promise<TaskList>;
 }
 
 export type CreateTaskInput = {
@@ -35,12 +36,17 @@ export type DeleteTaskInput = {
   taskId: string;
 }
 
+export type CreateListInput = {
+  title: string;
+}
+
 export interface CurrentBoardProvider {
   currentBoard(): QueryOf<Board>;
   createTask(input: CreateTaskInput): Promise<void>;
   editTask(input: EditTaskInput): Promise<void>;
   moveTask(input: MoveTaskInput): Promise<void>;
   deleteTask(input: DeleteTaskInput): Promise<void>;
+  createList(input: CreateListInput): Promise<void>;
 }
 
 const CurrentBoardContext = createContext<CurrentBoardProvider>(

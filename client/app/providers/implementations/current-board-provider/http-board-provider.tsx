@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { TaskopiaAPI } from "..";
 import {
+  CreateListInput,
   CreateTaskInput,
   CurrentBoardProvider,
   CurrentUserProvider,
@@ -235,6 +236,36 @@ export function HttpBoardProvider(
   
   }
 
+  const optimisticCreateList = async (input : CreateListInput) => {
+    if (!currentBoardQuery.data) {
+      throw new Error("No board loaded");
+    }
+
+    const newTaskList = {
+      id: "fake" + Math.random().toString(36).substring(7),
+      title: input.title,
+      positionInBoard: currentBoardQuery.data.taskLists.length,
+      tasks: [],
+    };
+
+    const newBoard: Board = {
+      ...currentBoardQuery.data,
+      taskLists: [...currentBoardQuery.data.taskLists, newTaskList],
+    };
+
+    setCurrentBoardQuery({
+      isLoading: false,
+      data: newBoard,
+      error: null,
+    });
+
+    addActionToQueue({
+      type: "CREATE_LIST",
+      actionResult: newTaskList,
+      actionInput: input,
+    });
+  }
+
   return {
     currentBoard: () => {
       return currentBoardQuery;
@@ -243,5 +274,6 @@ export function HttpBoardProvider(
     editTask: optimisticEditTask,
     moveTask: optimisticMoveTask,
     deleteTask: optimisticDeleteTask,
+    createList: optimisticCreateList,
   };
 }
