@@ -18,3 +18,4 @@ down:
 
 clean:
 	docker compose down --volumes --remove-orphans
+	docker image rm taskopia-backend taskopia-frontend taskopia-database

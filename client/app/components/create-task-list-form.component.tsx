@@ -1,3 +1,5 @@
+import { useForm } from "react-hook-form";
+
 type CreateTaskListFormComponentProps = {
   onCreateList: (title: string) => void;
 };
@@ -5,6 +7,8 @@ type CreateTaskListFormComponentProps = {
 export function CreateTaskListForm({
   onCreateList,
 }: CreateTaskListFormComponentProps) {
+
+  const {} = useForm();
   return (
     <div
       aria-label="Add List Section"
