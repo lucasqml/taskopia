@@ -1,8 +1,8 @@
 type CreateTaskListFormComponentProps = {
-  onCreateList: (listName: string) => void;
+  onCreateList: (title: string) => void;
 };
 
-export function CreateTaskListFormComponent({
+export function CreateTaskListForm({
   onCreateList,
 }: CreateTaskListFormComponentProps) {
   return (

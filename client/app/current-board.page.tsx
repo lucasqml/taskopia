@@ -1,20 +1,24 @@
 "use client";
 
-import { Header, TaskList } from "@/app/components";
-import { CreateTaskInput, CurrentBoardProvider, EditTaskInput, useCurrentBoardProvider } from "./providers/interfaces";
+import { CreateTaskListForm, Header, TaskList } from "@/app/components";
+import {
+  CreateListInput,
+  CreateTaskInput,
+  CurrentBoardProvider,
+  EditTaskInput,
+} from "./providers/interfaces";
 
 type CurrentBoardPageProps = {
-  provider: CurrentBoardProvider
+  provider: CurrentBoardProvider;
 };
 
-export function CurrentBoardPage({
-  provider
-}: CurrentBoardPageProps) {
+export function CurrentBoardPage({ provider }: CurrentBoardPageProps) {
   const { data: currentBoard, isLoading, error } = provider.currentBoard();
 
   const onAddTask = (task: CreateTaskInput) => provider.createTask(task);
-
   const onEditTask = (task: EditTaskInput) => provider.editTask(task);
+  const onAddList = (task: CreateListInput) => provider.createList(task);
+
   return (
     <>
       <Header page="home" />
@@ -29,8 +33,20 @@ export function CurrentBoardPage({
                 {currentBoard.taskLists
                   .sort((a, b) => a.positionInBoard - b.positionInBoard)
                   .map((taskList) => (
-                    <TaskList key={taskList.id} taskList={taskList} onAddTask={onAddTask} onEditTask={onEditTask} />
+                    <TaskList
+                      key={taskList.id}
+                      taskList={taskList}
+                      onAddTask={onAddTask}
+                      onEditTask={onEditTask}
+                    />
                   ))}
+                <CreateTaskListForm
+                  onCreateList={(title: string) =>
+                    onAddList({
+                      title,
+                    })
+                  }
+                />
               </div>
             </>
           )}
