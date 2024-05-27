@@ -1,4 +1,4 @@
-package com.example.taskopia
+package com.example.taskopia.integration
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

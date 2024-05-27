@@ -1,16 +1,16 @@
-package com.example.taskopia.service
+package com.example.taskopia.unit
 
 import com.example.taskopia.model.Task
 import com.example.taskopia.model.dto.UpdateTaskDto
 import com.example.taskopia.repository.TaskListRepository
 import com.example.taskopia.repository.TaskRepository
+import com.example.taskopia.service.TaskService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyLong
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import java.util.*

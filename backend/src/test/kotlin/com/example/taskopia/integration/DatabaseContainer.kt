@@ -1,4 +1,4 @@
-package com.example.taskopia
+package com.example.taskopia.integration
 
 import org.testcontainers.containers.MySQLContainer
 
