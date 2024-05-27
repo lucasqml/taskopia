@@ -24,4 +24,11 @@ class TaskList {
 
     @Column(name = "positionInBoard", nullable = false)
     var positionInBoard: Int = 0
+
+    constructor(){}
+
+    constructor(title: String, positionInBoard: Int) {
+        this.title = title
+        this.positionInBoard = positionInBoard
+    }
 }
