@@ -44,6 +44,8 @@ export function CurrentBoardPage({ provider }: CurrentBoardPageProps) {
                   onCreateList={(title: string) =>
                     onAddList({
                       title,
+                      boardId: currentBoard.id,
+                      positionInBoard: currentBoard.taskLists.length,
                     })
                   }
                 />

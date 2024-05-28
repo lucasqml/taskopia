@@ -56,3 +56,20 @@ export type PostTaskOutput = {
 export type PutTaskOutput = PostTaskOutput
 
 export type PutMoveTaskOutput = PutTaskOutput
+
+export type PostTaskListInput = {
+    title: string;
+    positionInBoard: number;
+    board: {
+        id: string;
+    }
+}
+
+export type PostTaskListOutput = {
+    id: string;
+    board: {
+        id: string;
+    }
+    title: string;
+    positionInBoard: number;
+}
