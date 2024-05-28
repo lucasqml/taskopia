@@ -1,5 +1,5 @@
-import { Board, Task } from "@/app/types";
-import { BoardAPI, CreateTaskInput, DeleteTaskInput, EditTaskInput, MoveTaskInput } from "@/app/providers/interfaces";
+import { Board, Task, TaskList } from "@/app/types";
+import { BoardAPI, CreateListInput, CreateTaskInput, DeleteTaskInput, EditTaskInput, MoveTaskInput } from "@/app/providers/interfaces";
 import { QueryOf } from "@/app/types/query";
 import { useEffect, useState } from "react";
 
@@ -26,7 +26,13 @@ type DeleteTaskAction = {
     actionInput: DeleteTaskInput;
 };
 
-type BoardAction = AddTaskAction | EditTaskAction | MoveTaskAction | DeleteTaskAction;
+type CreateListAction = {
+    type: "CREATE_LIST";
+    actionResult: TaskList;
+    actionInput: CreateListInput;
+};
+
+type BoardAction = AddTaskAction | EditTaskAction | MoveTaskAction | DeleteTaskAction | CreateListAction;
 
 type BoardProviderActionsHandlerData = {
     currentBoardQuery: QueryOf<Board>;
@@ -123,7 +129,7 @@ export function BoardProviderActionsHandler({
             // TODO throw better error
             throw error;
         }
-    
+
     }
 
     async function processMoveTaskAction(action: MoveTaskAction) {
@@ -168,7 +174,41 @@ export function BoardProviderActionsHandler({
         // actually send the request to the server
         try {
             await boardAPI.deleteTask(action.actionInput)
-            
+
+        } catch (error: any) {
+            // TODO throw better error
+            throw error;
+        }
+    }
+
+    async function processCreateListAction(action: CreateListAction) {
+        // actually send the request to the server
+        try {
+            const taskList = action.actionInput;
+            const optimisticTaskList = action.actionResult;
+            const createdTaskList = await boardAPI.postList(taskList);
+            if (!currentBoardQuery.data) {
+                throw new Error("No board loaded");
+            }
+            const board: Board = currentBoardQuery.data;
+
+            // update the task with the server response
+            const updatedBoard = {
+                ...currentBoardQuery.data,
+                taskLists: board.taskLists.map((taskList) => {
+                    if (taskList.id === optimisticTaskList.id) {
+                        return createdTaskList;
+                    }
+                    return taskList;
+                }
+                ),
+            }
+
+            setBoardQueryState({
+                isLoading: false,
+                data: updatedBoard,
+                error: null,
+            });
         } catch (error: any) {
             // TODO throw better error
             throw error;
@@ -194,6 +234,9 @@ export function BoardProviderActionsHandler({
                         break;
                     case "DELETE_TASK":
                         await processDeleteTaskAction(action);
+                        break;
+                    case "CREATE_LIST":
+                        await processCreateListAction(action);
                         break;
                 }
 

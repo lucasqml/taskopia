@@ -1,7 +1,7 @@
-import { Board, Task } from "@/app/types";
-import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput, MoveTaskInput, DeleteTaskInput } from "@/app/providers/interfaces";
+import { Board, Task, TaskList } from "@/app/types";
+import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput, MoveTaskInput, DeleteTaskInput, CreateListInput } from "@/app/providers/interfaces";
 import { AxiosInstance } from "axios";
-import { GetBoardOutput, PostTaskInput, PostTaskOutput, PutMoveTaskInput, PutMoveTaskOutput, PutTaskInput } from "./types";
+import { GetBoardOutput, PostTaskInput, PostTaskListInput, PostTaskOutput, PutMoveTaskInput, PutMoveTaskOutput, PutTaskInput } from "./types";
 
 export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
     
@@ -159,6 +159,34 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
             throw new Error(error)
         }
 
+    }
+
+    public  async postList(input: CreateListInput): Promise<TaskList> {
+        try {
+            const postInput: PostTaskListInput = {
+                board: {
+                    id: input.boardId
+                },
+                positionInBoard: input.positionInBoard,
+                title: input.title
+            }
+            const response = await this._getHttpClient().post(`/lists`, postInput)
+
+            const data = response.data as TaskList | null
+
+            if (!data) {
+                throw new Error('Task list not created')
+            }
+
+            return {
+                id: data.id,
+                title: data.title,
+                positionInBoard: data.positionInBoard,
+                tasks: []
+            }
+        } catch (error: any) {
+            throw new Error(error)
+        }
     }
 
 }

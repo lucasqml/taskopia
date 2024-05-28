@@ -1,5 +1,5 @@
 import { type TaskList } from "@/app/types";
-import { Task as TaskComponent } from "@/app/components";
+import { CreateTaskForm, Task as TaskComponent } from "@/app/components";
 import { CreateTaskInput, EditTaskInput } from "../providers/interfaces";
 import { useRef, useState } from "react";
 
@@ -10,27 +10,9 @@ type TaskListProps = {
 };
 
 export function TaskList({ taskList, onAddTask, onEditTask }: TaskListProps) {
-  const [isAddingTask, setIsAddingTask] = useState(false);
-  const [taskTitle, setTaskTitle] = useState("");
-
   const createInputRef = useRef<HTMLInputElement>(null);
 
-  const onFormSubmit = () => {
-    const positionInList = taskList.tasks.length;
-    const newTaskTitle = taskTitle.trim() || "Sem título + " + positionInList;
-    onAddTask({
-      description: "",
-      title: newTaskTitle,
-      taskListId: taskList.id,
-      positionInList,
-    });
-    setIsAddingTask(false);
-    setTaskTitle("");
-  };
-
   const onAddButtonClick = () => {
-    setTaskTitle("");
-    setIsAddingTask(true);
     createInputRef.current?.scrollIntoView({ behavior: "smooth" });
     createInputRef.current?.focus({
       preventScroll: true,
@@ -59,27 +41,11 @@ export function TaskList({ taskList, onAddTask, onEditTask }: TaskListProps) {
           .map((task) => (
             <TaskComponent key={task.id} task={task} onEditTask={onEditTask} />
           ))}
-
-        <form
-          className="flex flex-col gap-2 w-full justify-end p-0"
-          onSubmit={(e) => {
-            e.preventDefault();
-            onFormSubmit();
-          }}
-        >
-          <div className="rounded border-2 bg-white min-h-20 max-h-20">
-            <input
-              className="min-h-10 p-2 w-full border-none bg-transparent focus:outline-none text-pink-500"
-              type="text"
-              placeholder="Task title"
-              onChange={(e) => setTaskTitle(e.target.value)}
-              ref={createInputRef}
-            />
-          </div>
-          <button type="submit" className="p-2 rounded bg-green-500 text-white">
-            Add Task
-          </button>
-        </form>
+        <CreateTaskForm
+          createInputRef={createInputRef}
+          onSubmit={onAddTask}
+          taskList={taskList}
+        />
       </ul>
     </section>
   );

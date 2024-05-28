@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/lists")
+@CrossOrigin(origins = ["http://localhost:3000"])
 class TaskListController(private val taskListRepository: TaskListRepository) {
 
     @GetMapping("/{boardId}")
