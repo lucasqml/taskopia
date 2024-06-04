@@ -6,11 +6,12 @@ import {
   CurrentBoardProvider,
   CurrentUserProvider,
   DeleteTaskInput,
+  EditListInput,
   EditTaskInput,
   MoveTaskInput,
 } from "../../interfaces";
 import { QueryOf } from "@/app/types/query";
-import { Board, Task } from "@/app/types";
+import { Board, Task, TaskList } from "@/app/types";
 import { BoardProviderActionsHandler } from "./board-provider-actions-handler";
 
 export function HttpBoardProvider(
@@ -143,7 +144,7 @@ export function HttpBoardProvider(
       actionResult: updatedTask,
       actionInput: task,
     });
-  }
+  };
 
   const optimisticMoveTask = async (task: MoveTaskInput) => {
     if (!currentBoardQuery.data) {
@@ -156,7 +157,7 @@ export function HttpBoardProvider(
     if (!currentTask) {
       throw new Error("Task not found");
     }
-    
+
     const oldList = currentBoardQuery.data.taskLists.find(
       (tl) => tl.id === task.originTaskListId
     );
@@ -170,11 +171,9 @@ export function HttpBoardProvider(
       taskListId: task.destinationTaskListId,
     };
 
-
     if (!oldList || !targetList) {
       throw new Error("Task list not found");
     }
-
 
     const newBoard: Board = {
       ...currentBoardQuery.data,
@@ -206,7 +205,7 @@ export function HttpBoardProvider(
       actionResult: updatedTask,
       actionInput: task,
     });
-  }
+  };
 
   const optimisticDeleteTask = async (input: DeleteTaskInput) => {
     if (!currentBoardQuery.data) {
@@ -233,10 +232,9 @@ export function HttpBoardProvider(
       type: "DELETE_TASK",
       actionInput: input,
     });
-  
-  }
+  };
 
-  const optimisticCreateList = async (input : CreateListInput) => {
+  const optimisticCreateList = async (input: CreateListInput) => {
     if (!currentBoardQuery.data) {
       throw new Error("No board loaded");
     }
@@ -264,7 +262,47 @@ export function HttpBoardProvider(
       actionResult: newTaskList,
       actionInput: input,
     });
-  }
+  };
+
+  const optimisticEditList = async (input: EditListInput) => {
+    if (!currentBoardQuery.data) {
+      throw new Error("No board loaded");
+    }
+    const currentList = currentBoardQuery.data.taskLists.find(
+      (taskList) => taskList.id === input.taskListId
+    );
+
+    if (!currentList) {
+      throw new Error("Task list not found. Update Failed");
+    }
+    const updatedList: TaskList = {
+      ...currentList,
+      title: input.title,
+    };
+
+    const newBoard: Board = {
+      ...currentBoardQuery.data,
+      taskLists: currentBoardQuery.data.taskLists.map((list) => {
+        if (list.id == input.taskListId) {
+          return updatedList;
+        }
+        return list;
+      }),
+    };
+
+    setCurrentBoardQuery({
+      isLoading: false,
+      data: newBoard,
+      error: null,
+    });
+
+    addActionToQueue({
+      type: 'EDIT_LIST',
+      actionInput: input,
+      actionResult: updatedList
+      
+    });
+  };
 
   return {
     currentBoard: () => {
@@ -275,5 +313,6 @@ export function HttpBoardProvider(
     moveTask: optimisticMoveTask,
     deleteTask: optimisticDeleteTask,
     createList: optimisticCreateList,
+    editList: optimisticEditList
   };
 }

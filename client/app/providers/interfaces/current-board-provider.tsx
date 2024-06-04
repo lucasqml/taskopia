@@ -42,6 +42,11 @@ export type CreateListInput = {
   boardId: string;
 }
 
+export type EditListInput = {
+  taskListId: string;
+  title: string
+}
+
 export interface CurrentBoardProvider {
   currentBoard(): QueryOf<Board>;
   createTask(input: CreateTaskInput): Promise<void>;
@@ -49,6 +54,7 @@ export interface CurrentBoardProvider {
   moveTask(input: MoveTaskInput): Promise<void>;
   deleteTask(input: DeleteTaskInput): Promise<void>;
   createList(input: CreateListInput): Promise<void>;
+  editList(input: EditListInput): Promise<void>;
 }
 
 const CurrentBoardContext = createContext<CurrentBoardProvider>(
