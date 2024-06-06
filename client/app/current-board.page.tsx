@@ -5,6 +5,7 @@ import {
   CreateListInput,
   CreateTaskInput,
   CurrentBoardProvider,
+  EditListInput,
   EditTaskInput,
 } from "./providers/interfaces";
 
@@ -18,7 +19,7 @@ export function CurrentBoardPage({ provider }: CurrentBoardPageProps) {
   const onAddTask = (task: CreateTaskInput) => provider.createTask(task);
   const onEditTask = (task: EditTaskInput) => provider.editTask(task);
   const onAddList = (task: CreateListInput) => provider.createList(task);
-
+  const onEditList = (input: EditListInput) => provider.editList(input)
   return (
     <>
       <Header page="home" />
@@ -38,6 +39,7 @@ export function CurrentBoardPage({ provider }: CurrentBoardPageProps) {
                       taskList={taskList}
                       onAddTask={onAddTask}
                       onEditTask={onEditTask}
+                      onEditTaskList={onEditList}
                     />
                   ))}
                 <CreateTaskListForm

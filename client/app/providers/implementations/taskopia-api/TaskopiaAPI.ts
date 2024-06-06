@@ -1,10 +1,10 @@
 import { Board, Task, TaskList } from "@/app/types";
-import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput, MoveTaskInput, DeleteTaskInput, CreateListInput } from "@/app/providers/interfaces";
+import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput, MoveTaskInput, DeleteTaskInput, CreateListInput, EditListInput } from "@/app/providers/interfaces";
 import { AxiosInstance } from "axios";
 import { GetBoardOutput, PostTaskInput, PostTaskListInput, PostTaskOutput, PutMoveTaskInput, PutMoveTaskOutput, PutTaskInput } from "./types";
 
 export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
-    
+
     protected abstract _getHttpClient(): AxiosInstance
 
     public async getUser(id: string) {
@@ -92,7 +92,7 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
             throw new Error(error)
         }
     }
-    
+
     public async putTask(task: EditTaskInput): Promise<Task> {
         try {
 
@@ -117,7 +117,7 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
                 positionInList: data.positionInTaskList,
                 taskListId: data.taskList.id
             }
-        }   
+        }
         catch (error: any) {
             throw new Error(error)
         }
@@ -161,7 +161,7 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
 
     }
 
-    public  async postList(input: CreateListInput): Promise<TaskList> {
+    public async postList(input: CreateListInput): Promise<TaskList> {
         try {
             const postInput: PostTaskListInput = {
                 board: {
@@ -187,6 +187,37 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
         } catch (error: any) {
             throw new Error(error)
         }
+    }
+
+    public async putList(input: EditListInput): Promise<TaskList> {
+        // try {
+        //     const input: PutTaskInput = {
+        //         title: task.title,
+        //         description: task.description
+        //     }
+
+        //     const response = await this._getHttpClient().put(`/tasks/${task.id}`, input)
+
+        //     const data = response.data as PostTaskOutput | null
+        //     if (!data) {
+        //         throw new Error('Task not updated')
+        //     }
+
+        //     return {
+        //         id: data.id,
+        //         title: data.title,
+        //         description: data.description,
+        //         tags: [],
+        //         dueDate: new Date(data.createdAt),
+        //         positionInList: data.positionInTaskList,
+        //         taskListId: data.taskList.id
+        //     }
+        // }
+        // catch (error: any) {
+        //     throw new Error(error)
+        // }
+        throw new Error('Not implemented')
+        // TODO implemente
     }
 
 }

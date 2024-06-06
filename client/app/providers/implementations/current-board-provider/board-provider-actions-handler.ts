@@ -222,6 +222,41 @@ export function BoardProviderActionsHandler({
     }
 
 
+    async function processEditListAction(action: EditListAction) {
+        // actually send the request to the server
+        try {
+            const taskList = action.actionInput;
+            const optimisticTaskList = action.actionResult;
+            const editedTaskList = await boardAPI.putList(taskList);
+            if (!currentBoardQuery.data) {
+                throw new Error("No board loaded");
+            }
+            const board: Board = currentBoardQuery.data;
+
+            // update the list with the server response
+            const updatedBoard = {
+                ...currentBoardQuery.data,
+                taskLists: board.taskLists.map((taskList) => {
+                    if (taskList.id === optimisticTaskList.id) {
+                        return editedTaskList
+                    }
+                    return taskList
+                }),
+            };
+
+            setBoardQueryState({
+                isLoading: false,
+                data: updatedBoard,
+                error: null,
+            });
+        } catch (error: any) {
+            // TODO throw better error
+            throw error;
+        }
+
+    }
+
+
     useEffect(() => {
         async function processActions() {
             if (actionsQueue.length === 0) return;
@@ -245,7 +280,8 @@ export function BoardProviderActionsHandler({
                         await processCreateListAction(action);
                         break;
                     case "EDIT_LIST":
-                        // TODO
+                        // TODO do it
+                        // await processEditListAction(action);
                         break;
                 }
 
