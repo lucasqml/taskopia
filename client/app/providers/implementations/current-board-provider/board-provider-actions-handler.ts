@@ -238,7 +238,11 @@ export function BoardProviderActionsHandler({
                 ...currentBoardQuery.data,
                 taskLists: board.taskLists.map((taskList) => {
                     if (taskList.id === optimisticTaskList.id) {
-                        return editedTaskList
+                        return {
+                            ...taskList,
+                            ...editedTaskList
+
+                        }
                     }
                     return taskList
                 }),
@@ -280,8 +284,7 @@ export function BoardProviderActionsHandler({
                         await processCreateListAction(action);
                         break;
                     case "EDIT_LIST":
-                        // TODO do it
-                        // await processEditListAction(action);
+                        await processEditListAction(action);
                         break;
                 }
 

@@ -10,7 +10,7 @@ export interface BoardAPI {
   moveTask(task: MoveTaskInput): Promise<Task>;
   deleteTask(task: DeleteTaskInput): Promise<void>;
   postList(input: CreateListInput): Promise<TaskList>;
-  putList(input: EditListInput): Promise<TaskList>;
+  putList(input: EditListInput): Promise<Partial<TaskList>>;
 }
 
 export type CreateTaskInput = {

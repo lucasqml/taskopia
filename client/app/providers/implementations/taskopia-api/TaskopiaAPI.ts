@@ -1,7 +1,7 @@
 import { Board, Task, TaskList } from "@/app/types";
 import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput, MoveTaskInput, DeleteTaskInput, CreateListInput, EditListInput } from "@/app/providers/interfaces";
 import { AxiosInstance } from "axios";
-import { GetBoardOutput, PostTaskInput, PostTaskListInput, PostTaskOutput, PutMoveTaskInput, PutMoveTaskOutput, PutTaskInput } from "./types";
+import { GetBoardOutput, PostTaskInput, PostTaskListInput, PostTaskOutput, PutMoveTaskInput, PutMoveTaskOutput, PutTaskInput, PutTaskListInput, PutTaskListOutput } from "./types";
 
 export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
 
@@ -189,35 +189,29 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
         }
     }
 
-    public async putList(input: EditListInput): Promise<TaskList> {
-        // try {
-        //     const input: PutTaskInput = {
-        //         title: task.title,
-        //         description: task.description
-        //     }
+    public async putList(actionInput: EditListInput): Promise<Partial<TaskList>> {
+        try {
+            const httpInput: PutTaskListInput = {
+                title: actionInput.title,
+            }
 
-        //     const response = await this._getHttpClient().put(`/tasks/${task.id}`, input)
+            const response = await this._getHttpClient().put(`/lists/${actionInput.taskListId}`, httpInput)
 
-        //     const data = response.data as PostTaskOutput | null
-        //     if (!data) {
-        //         throw new Error('Task not updated')
-        //     }
+            const data = response.data as PutTaskListOutput | null
+            if (!data) {
+                throw new Error('Task not updated')
+            }
 
-        //     return {
-        //         id: data.id,
-        //         title: data.title,
-        //         description: data.description,
-        //         tags: [],
-        //         dueDate: new Date(data.createdAt),
-        //         positionInList: data.positionInTaskList,
-        //         taskListId: data.taskList.id
-        //     }
-        // }
-        // catch (error: any) {
-        //     throw new Error(error)
-        // }
-        throw new Error('Not implemented')
-        // TODO implemente
+            return {
+                id: data.id,
+                title: data.title,
+                positionInBoard: data.positionInBoard,
+
+            }
+        }
+        catch (error: any) {
+            throw new Error(error)
+        }
     }
 
 }
