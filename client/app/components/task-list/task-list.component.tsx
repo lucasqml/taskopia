@@ -1,8 +1,8 @@
 import { type TaskList } from "@/app/types";
 import { CreateTaskForm, Task as TaskComponent } from "@/app/components";
-import { CreateTaskInput, EditListInput, EditTaskInput } from "../providers/interfaces";
+import { CreateTaskInput, EditListInput, EditTaskInput } from "../../providers/interfaces";
 import { useRef, useState } from "react";
-import { EditIcon } from "../icons";
+import { EditIcon } from "../../icons";
 
 type TaskListProps = {
   taskList: TaskList;
