@@ -73,3 +73,9 @@ export type PostTaskListOutput = {
     title: string;
     positionInBoard: number;
 }
+
+export type PutTaskListInput = {
+    title: string;
+}
+
+export type PutTaskListOutput = PostTaskListOutput

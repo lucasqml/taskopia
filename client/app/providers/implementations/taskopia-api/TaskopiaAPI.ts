@@ -1,10 +1,10 @@
 import { Board, Task, TaskList } from "@/app/types";
-import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput, MoveTaskInput, DeleteTaskInput, CreateListInput } from "@/app/providers/interfaces";
+import { BoardAPI, UserAPI, CreateTaskInput, EditTaskInput, MoveTaskInput, DeleteTaskInput, CreateListInput, EditListInput } from "@/app/providers/interfaces";
 import { AxiosInstance } from "axios";
-import { GetBoardOutput, PostTaskInput, PostTaskListInput, PostTaskOutput, PutMoveTaskInput, PutMoveTaskOutput, PutTaskInput } from "./types";
+import { GetBoardOutput, PostTaskInput, PostTaskListInput, PostTaskOutput, PutMoveTaskInput, PutMoveTaskOutput, PutTaskInput, PutTaskListInput, PutTaskListOutput } from "./types";
 
 export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
-    
+
     protected abstract _getHttpClient(): AxiosInstance
 
     public async getUser(id: string) {
@@ -92,7 +92,7 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
             throw new Error(error)
         }
     }
-    
+
     public async putTask(task: EditTaskInput): Promise<Task> {
         try {
 
@@ -117,7 +117,7 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
                 positionInList: data.positionInTaskList,
                 taskListId: data.taskList.id
             }
-        }   
+        }
         catch (error: any) {
             throw new Error(error)
         }
@@ -161,7 +161,7 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
 
     }
 
-    public  async postList(input: CreateListInput): Promise<TaskList> {
+    public async postList(input: CreateListInput): Promise<TaskList> {
         try {
             const postInput: PostTaskListInput = {
                 board: {
@@ -185,6 +185,31 @@ export abstract class TaskopiaAPI implements BoardAPI, UserAPI {
                 tasks: []
             }
         } catch (error: any) {
+            throw new Error(error)
+        }
+    }
+
+    public async putList(actionInput: EditListInput): Promise<Partial<TaskList>> {
+        try {
+            const httpInput: PutTaskListInput = {
+                title: actionInput.title,
+            }
+
+            const response = await this._getHttpClient().put(`/lists/${actionInput.taskListId}`, httpInput)
+
+            const data = response.data as PutTaskListOutput | null
+            if (!data) {
+                throw new Error('Task not updated')
+            }
+
+            return {
+                id: data.id,
+                title: data.title,
+                positionInBoard: data.positionInBoard,
+
+            }
+        }
+        catch (error: any) {
             throw new Error(error)
         }
     }

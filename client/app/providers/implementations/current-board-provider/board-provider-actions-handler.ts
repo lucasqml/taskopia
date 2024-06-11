@@ -1,5 +1,5 @@
 import { Board, Task, TaskList } from "@/app/types";
-import { BoardAPI, CreateListInput, CreateTaskInput, DeleteTaskInput, EditTaskInput, MoveTaskInput } from "@/app/providers/interfaces";
+import { BoardAPI, CreateListInput, CreateTaskInput, DeleteTaskInput, EditListInput, EditTaskInput, MoveTaskInput } from "@/app/providers/interfaces";
 import { QueryOf } from "@/app/types/query";
 import { useEffect, useState } from "react";
 
@@ -32,7 +32,13 @@ type CreateListAction = {
     actionInput: CreateListInput;
 };
 
-type BoardAction = AddTaskAction | EditTaskAction | MoveTaskAction | DeleteTaskAction | CreateListAction;
+type EditListAction = {
+    type: "EDIT_LIST",
+    actionResult: TaskList;
+    actionInput: EditListInput;
+}
+
+type BoardAction = AddTaskAction | EditTaskAction | MoveTaskAction | DeleteTaskAction | CreateListAction | EditListAction
 
 type BoardProviderActionsHandlerData = {
     currentBoardQuery: QueryOf<Board>;
@@ -216,6 +222,45 @@ export function BoardProviderActionsHandler({
     }
 
 
+    async function processEditListAction(action: EditListAction) {
+        // actually send the request to the server
+        try {
+            const taskList = action.actionInput;
+            const optimisticTaskList = action.actionResult;
+            const editedTaskList = await boardAPI.putList(taskList);
+            if (!currentBoardQuery.data) {
+                throw new Error("No board loaded");
+            }
+            const board: Board = currentBoardQuery.data;
+
+            // update the list with the server response
+            const updatedBoard = {
+                ...currentBoardQuery.data,
+                taskLists: board.taskLists.map((taskList) => {
+                    if (taskList.id === optimisticTaskList.id) {
+                        return {
+                            ...taskList,
+                            ...editedTaskList
+
+                        }
+                    }
+                    return taskList
+                }),
+            };
+
+            setBoardQueryState({
+                isLoading: false,
+                data: updatedBoard,
+                error: null,
+            });
+        } catch (error: any) {
+            // TODO throw better error
+            throw error;
+        }
+
+    }
+
+
     useEffect(() => {
         async function processActions() {
             if (actionsQueue.length === 0) return;
@@ -237,6 +282,9 @@ export function BoardProviderActionsHandler({
                         break;
                     case "CREATE_LIST":
                         await processCreateListAction(action);
+                        break;
+                    case "EDIT_LIST":
+                        await processEditListAction(action);
                         break;
                 }
 
